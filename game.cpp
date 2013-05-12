@@ -97,7 +97,7 @@ void Game::drawBoard() {
     }
 
     for (int j = 0; j < boardWidth; j++) {
-            if (j >= 10) cout << (j+1)/10 << " ";
+            if (j >= 10) cout << j/10 << " ";
 	    else cout << j << " ";
     }
     cout << endl;
