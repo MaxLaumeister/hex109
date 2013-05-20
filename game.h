@@ -2,7 +2,7 @@
 
 using namespace std;
 
-enum Space {EMPTY, BLACK, WHITE};
+enum Space {P_EMPTY, P_BLACK, P_WHITE};
 
 class Game {
     public:
@@ -32,7 +32,7 @@ inline void Game::init(int width, int height) {
     }
     boardWidth = width;
     boardHeight = height;
-    board.resize(boardHeight, vector<Space>(boardWidth, EMPTY));
+    board.resize(boardHeight, vector<Space>(boardWidth, P_EMPTY));
 }
 
 class Move {

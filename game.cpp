@@ -3,18 +3,19 @@
 #include <cmath>
 #include <cstdlib>
 #include "game.h"
+#include "hexGraph.h"
 
 using namespace std;
 
 ostream& operator<<(ostream &out, Space &sp) {
    switch (sp) {
-       case EMPTY:
+       case P_EMPTY:
            out << "-";
 	   break;
-       case BLACK:
+       case P_BLACK:
            out << "B";
 	   break;
-       case WHITE:
+       case P_WHITE:
            out << "W";
 	   break;
    }

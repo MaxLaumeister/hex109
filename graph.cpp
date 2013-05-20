@@ -7,6 +7,7 @@
 
 using namespace std;
 
+const int debug = false;
 const int INTEGER_MAX = std::numeric_limits<int>::max();
 
 // Returns a random double between 0 and 1

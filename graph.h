@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const int debug = false;
+extern const int debug;
 
 enum Color {
     RED, GREEN, BLUE, BLACK, ALL
@@ -37,7 +37,7 @@ bool operator>=(const Arc &a1, const Arc &a2);
 
 string colorToAlpha(Color c);
 
-// Weighted undirected graph
+// Weighted directed graph
 
 class Graph {
 public:
