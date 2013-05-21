@@ -44,12 +44,14 @@ void Game::movePlayer(){
     int arg = 0;
     int x;
     int y;
+    cout << "Player (White) connects horizontally." << endl;
+    cout << "CPU (Black) connects vertically." << endl;
     while(true) {
         if (arg == 0) {
-	    cout << "Enter move X: ";
+	    cout << "Enter move coordinate X: ";
             cin >> x;
 	} else if (arg == 1) {
-	    cout << "Enter move Y: ";
+	    cout << "Enter move coordinate Y: ";
 	    cin >> y;
 	} else break;
 	if (cin.fail()) {

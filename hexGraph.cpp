@@ -1,6 +1,16 @@
 #include "hexGraph.h"
 #include <assert.h>
 
+void hexGraph::init() {
+    // Initialize the game board array
+    spaces = new vector<Space>(widthHeight*widthHeight, P_EMPTY);
+    // Connect the game board graph
+    /*for (int i = 0; i < spaces->size(); i++) {
+    }*/
+    addArc(1,1);
+    cout << *this;
+}
+
 bool hexGraph::isValidSpace(int index) {
     return index >= 0 && index < spaces->size();
 }

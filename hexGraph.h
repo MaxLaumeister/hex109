@@ -9,11 +9,12 @@ class hexGraph : public Graph {
     public:
       hexGraph(int thisWidthHeight) : Graph(thisWidthHeight){
           widthHeight = thisWidthHeight;
-          spaces = new vector<Space>(widthHeight*widthHeight, P_EMPTY);
+          init();
       };
       ~hexGraph() {
           delete spaces;
       }
+      void init();
       int getIndex(int x, int y);
       bool isValidSpace(int index);
       bool isValidSpace(int x, int y);

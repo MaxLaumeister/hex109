@@ -10,7 +10,7 @@ using namespace std;
 extern const int debug;
 
 enum Color {
-    RED, GREEN, BLUE, BLACK, ALL
+    NONE, RED, GREEN, BLUE, BLACK, ALL
 };
 
 // Each node has a list of Arcs that connect it to other nodes
@@ -47,15 +47,15 @@ public:
 
     ~Graph();
 
-    int getSize() {
+    inline int getSize() {
         return size;
     };
 
-    bool isEmpty() {
+    inline bool isEmpty() {
         return size == 0;
     }
-    void addEdge(int node1, int node2, double distance, Color color);
-    void addArc(int node1, int node2, double distance, Color color);
+    void addEdge(int node1, int node2, double distance = 1, Color color = NONE);
+    void addArc(int node1, int node2, double distance = 1, Color color = NONE);
     void randomFill(double density, int min_distance, int max_distance);
     Graph* prim(vector<Color> colorlist, int startnode = 0) throw (int);
     double dijkstra(int node1, int node2, Color color = ALL, bool verbose = false);
@@ -63,7 +63,7 @@ public:
     double totalCost();
     void uglyPrint();
     friend ostream& operator<<(ostream &out, Graph &inGraph);
-private:
+protected:
     int size;
     vector< vector<Arc*> > nodes;
 };

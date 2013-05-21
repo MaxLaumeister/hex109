@@ -136,14 +136,14 @@ string colorToAlpha(Color c) {
 
 // Add a two-way edge to the graph
 
-inline void Graph::addEdge(int node1, int node2, double distance = 1, Color color = BLACK) {
+inline void Graph::addEdge(int node1, int node2, double distance, Color color) {
     addArc(node1, node2, distance, color);
     addArc(node2, node1, distance, color);
 }
 
 // Add a one-way edge to the graph, as in a digraph
 
-inline void Graph::addArc(int node1, int node2, double distance = 1, Color color = BLACK) {
+inline void Graph::addArc(int node1, int node2, double distance, Color color) {
     Arc* newarc = new Arc(node1, node2, distance, color);
     nodes.at(node1).push_back(newarc);
 }
