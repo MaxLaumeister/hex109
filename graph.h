@@ -42,8 +42,11 @@ string colorToAlpha(Color c);
 class Graph {
 public:
 
-    Graph(int s);
-    Graph(string inputfile) throw(int);
+    Graph(int s) : size(s), nodes(vector< vector<Arc*> >(size)) {}
+    Graph(string inputfile) throw(int) {
+        init(inputfile);
+    }
+    void init(string inputfile);
 
     ~Graph();
 

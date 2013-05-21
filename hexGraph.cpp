@@ -5,9 +5,13 @@ void hexGraph::init() {
     // Initialize the game board array
     spaces = new vector<Space>(widthHeight*widthHeight, P_EMPTY);
     // Connect the game board graph
-    /*for (int i = 0; i < spaces->size(); i++) {
-    }*/
-    addArc(1,1);
+    cout << "size: " << size << endl;
+    for (int i = 2; i < size; i++) {
+        addArc(1,i);
+        cout << "Arc Added" << endl;
+    }
+    
+    // DEBUG: Print the graph
     cout << *this;
 }
 

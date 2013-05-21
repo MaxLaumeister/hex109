@@ -16,10 +16,7 @@ inline double prob() {
     return static_cast<double> (rand()) / RAND_MAX;
 }
 
-Graph::Graph(int s) : size(s), nodes(vector< vector<Arc*> >(size)) {}
-
-Graph::Graph(string inputfile) throw(int) {
-    
+void Graph::init(string inputfile) {
     size = 0;
 
     ifstream ifs(inputfile.c_str());
