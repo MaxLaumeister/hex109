@@ -10,7 +10,6 @@ class hexGraph : public Graph {
       hexGraph(int thisWidthHeight) : Graph(thisWidthHeight){
           widthHeight = thisWidthHeight;
 	  for (int i = 0; i < widthHeight*widthHeight; i++) spaces.push_back(P_EMPTY);
-	  cout << endl << "vector length: " << spaces.size();
       };
       int getIndex(int x, int y);
       bool isValidSpace(int index);

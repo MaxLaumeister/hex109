@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-    Game newGame(Player::getBoardSize());
+    Game newGame;
     newGame.drawBoard();
 
     return 0;

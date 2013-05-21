@@ -85,7 +85,7 @@ void Game::drawBoard() {
         // Print all of the spaces in the row
         
 	for(int j = 0; j < boardWidth; j++) {
-            cout << board.getSpace(i, j) << " ";
+            cout << board->getSpace(i, j) << " ";
         }
 
         // Print the row number one more time on the right
