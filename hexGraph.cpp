@@ -19,7 +19,6 @@ Space hexGraph::getSpace(int index) {
 }
 
 Space hexGraph::getSpace(int x, int y) {
-    assert(isValidSpace(x, y));
     return getSpace(getIndex(x, y));
 }
 
@@ -29,7 +28,6 @@ void hexGraph::setSpace(int index, Space sp) {
 }
 
 void hexGraph::setSpace(int x, int y, Space sp) {
-    assert(isValidSpace(x, y));
     setSpace(getIndex(x, y), sp);
 }
 

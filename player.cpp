@@ -15,7 +15,7 @@ namespace Player{
             cout << "Enter Game Board Size (11 is standard): ";
 	    cin >> size;
 	    if (cin.fail()) {
-                cout << "Enter a number lol" << endl << endl;
+                cout << "Enter a number please!" << endl << endl;
 		cin.clear();
 		cin.ignore(10000, '\n');
 		continue;

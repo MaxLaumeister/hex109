@@ -1,10 +1,10 @@
-TARGET=asg4
-CC=g++
-CFLAGS=-Wall
+TARGET= asg4
+CC= g++
+CFLAGS=
 DEPS = graph.h game.h player.h hexGraph.h
 OBJ = main.o graph.o graph_algorithm.o game.o player.o hexGraph.o
 
-%.o: %.c $(DEPS)
+%.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(TARGET): $(OBJ)

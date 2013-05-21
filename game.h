@@ -6,7 +6,7 @@ using namespace std;
 
 class Game {
     public:
-      Game(int size):board(size), turn(0), widthHeight(size){};
+      Game(int size):turn(0), widthHeight(size), board(size){};
       void drawBoard();
     private:
       int turn;
