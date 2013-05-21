@@ -6,7 +6,7 @@
 
 using namespace std;
 
-ostream& operator<<(ostream &out, Space &sp) {
+ostream& operator<<(ostream &out, Space sp) {
    switch (sp) {
        case P_EMPTY:
            out << "-";
