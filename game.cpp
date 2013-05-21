@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdlib>
 #include "game.h"
-#include "hexGraph.h"
 
 using namespace std;
 
@@ -23,6 +22,9 @@ ostream& operator<<(ostream &out, Space &sp) {
 }
 
 void Game::drawBoard() {
+    
+    int boardHeight = widthHeight;
+    int boardWidth = widthHeight;
 
     // Drawing a nice board ended up being 10x more difficult than I ever
     // thought it could be. Anyway, here's the spaghetti that produces
@@ -81,9 +83,11 @@ void Game::drawBoard() {
 	cout << " " << i << "  ";
  
         // Print all of the spaces in the row
-
+        
+        Space s;
 	for(int j = 0; j < boardWidth; j++) {
-            cout << board[i][j] << " ";
+            s = board.getSpace(i, j);
+            cout << s << " ";
         }
 
         // Print the row number one more time on the right
