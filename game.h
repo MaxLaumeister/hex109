@@ -5,6 +5,8 @@
 
 using namespace std;
 
+enum Agent {NOBODY, PLAYER, COM};
+
 class Game {
     public:
       Game() {
@@ -15,8 +17,13 @@ class Game {
       ~Game(){
           delete board;
       }
+      void beginPlay();
       void drawBoard();
     private:
+      void mainLoop();
+      void movePlayer();
+      void moveCom();
+      Agent checkWinner();
       int turn;
       int widthHeight;
       hexGraph* board;

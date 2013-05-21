@@ -21,6 +21,60 @@ ostream& operator<<(ostream &out, Space sp) {
    return out;
 }
 
+void Game::beginPlay() {
+    mainLoop();
+}
+
+void Game::mainLoop() {
+    Agent winner;
+    while(true) {
+        drawBoard();
+	movePlayer();
+	if (winner = checkWinner()) break;
+        moveCom();
+	if (winner = checkWinner()) break;
+    }
+    // use winner value
+}
+
+void Game::movePlayer(){
+
+    // Get player input
+
+    int arg = 0;
+    int x;
+    int y;
+    while(true) {
+        if (arg == 0) {
+	    cout << "Enter move X: ";
+            cin >> x;
+	} else if (arg == 1) {
+	    cout << "Enter move Y: ";
+	    cin >> y;
+	} else break;
+	if (cin.fail()) {
+	    cout << "Enter a number please!" << endl;
+	    cin.clear();
+	    cin.ignore(10000, '\n');
+	    continue;
+	} else arg++;
+    }
+
+    // Record move in game board
+
+    board->setSpace(x, y, P_WHITE);
+    // Remember to add checking for move legality here.
+}
+
+void Game::moveCom(){
+    //TODO
+}
+
+Agent Game::checkWinner(){
+    //TODO
+    return NOBODY;
+}
+
 void Game::drawBoard() {
     
     int boardHeight = widthHeight;
@@ -85,7 +139,7 @@ void Game::drawBoard() {
         // Print all of the spaces in the row
         
 	for(int j = 0; j < boardWidth; j++) {
-            cout << board->getSpace(i, j) << " ";
+            cout << board->getSpace(j, i) << " ";
         }
 
         // Print the row number one more time on the right
