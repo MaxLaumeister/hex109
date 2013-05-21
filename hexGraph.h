@@ -13,8 +13,12 @@ class hexGraph : public Graph {
 	  cout << endl << "vector length: " + spaces.size();
       };
       int getIndex(int x, int y);
+      bool isValidSpace(int index);
+      bool isValidSpace(int x, int y);
       Space getSpace(int index);
       Space getSpace(int x, int y);
+      void setSpace(int index, Space sp);
+      void setSpace(int x, int y, Space sp);
     private:
       int widthHeight;
       vector<Space> spaces;
