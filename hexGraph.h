@@ -7,9 +7,9 @@ enum Space {P_EMPTY, P_BLACK, P_WHITE};
 
 class hexGraph : public Graph {
     public:
-      // This constructor adds 4 extra nodes - these will become board edge pseudonodes.
-      hexGraph(int thisWidthHeight) : Graph(thisWidthHeight * thisWidthHeight + 4){
-          sideLength = thisWidthHeight;
+      // Constructor adds 4 extra nodes to act as board edge pseudonodes.
+      hexGraph(int thisSideLength) : Graph(thisSideLength * thisSideLength + 4), 
+      sideLength(thisSideLength){
           pseudo_top = sideLength * sideLength;
           pseudo_bottom = pseudo_top + 1;
           pseudo_left = pseudo_bottom + 1;
@@ -27,6 +27,7 @@ class hexGraph : public Graph {
       void setSpace(int index, Space sp);
       void setSpace(int x, int y, Space sp);
       bool isValidMove(int x, int y);
+      const int sideLength;
       // Indexes of the pseudonodes
       int pseudo_top;
       int pseudo_bottom;
@@ -35,7 +36,6 @@ class hexGraph : public Graph {
     private:
       bool isValidSpace(int index);
       bool isValidSpace(int x, int y);
-      int sideLength;
       vector<Space>* spaces;
 };
 

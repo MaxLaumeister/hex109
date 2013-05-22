@@ -1,5 +1,3 @@
-#include <vector>
-#include <cstdlib>
 #include "hexGraph.h"
 #include "player.h"
 
@@ -9,10 +7,8 @@ enum Agent {NOBODY, PLAYER, COM};
 
 class Game {
     public:
-      Game() {
-          turn = 0;
-          widthHeight = Player::getBoardSize();
-          board = new hexGraph(widthHeight);
+      Game() : turn(0) {
+          board = new hexGraph(Player::getBoardSize());
           // DEBUG: Print the graph
           cout << *board;
           // DEBUG: Run Dijkstra
@@ -29,7 +25,6 @@ class Game {
       void moveCom();
       Agent checkWinner();
       int turn;
-      int widthHeight;
       hexGraph* board;
 };
 

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <cmath>
 #include <cstdlib>
 #include "game.h"
@@ -68,8 +67,8 @@ Agent Game::checkWinner(){
 
 void Game::drawBoard() {
     
-    int boardHeight = widthHeight;
-    int boardWidth = widthHeight;
+    int boardHeight = board->sideLength;
+    int boardWidth = boardHeight;
 
     // Drawing a nice board ended up being 10x more difficult than I ever
     // thought it could be. Anyway, here's the spaghetti that produces

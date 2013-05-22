@@ -1,8 +1,6 @@
-#include <cstdlib>
+#include <queue>
 #include <list>
 #include <iostream>
-#include <limits>
-#include <algorithm>
 
 #include "graph.h"
 
