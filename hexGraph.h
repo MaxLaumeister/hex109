@@ -9,11 +9,11 @@ class hexGraph : public Graph {
     public:
       // This constructor adds 4 extra nodes - these will become board edge pseudonodes.
       hexGraph(int thisWidthHeight) : Graph(thisWidthHeight * thisWidthHeight + 4){
-          widthHeight = thisWidthHeight;
-          pseudo_top = widthHeight * widthHeight;
-          pseudo_bottom = widthHeight * widthHeight + 1;
-          pseudo_left = widthHeight * widthHeight + 2;
-          pseudo_right = widthHeight * widthHeight + 3;
+          sideLength = thisWidthHeight;
+          pseudo_top = sideLength * sideLength;
+          pseudo_bottom = pseudo_top + 1;
+          pseudo_left = pseudo_bottom + 1;
+          pseudo_right = pseudo_left + 1;
           init();
       };
       ~hexGraph() {
@@ -29,7 +29,7 @@ class hexGraph : public Graph {
       void setSpace(int index, Space sp);
       void setSpace(int x, int y, Space sp);
     private:
-      int widthHeight;
+      int sideLength;
       vector<Space>* spaces;
       // Indexes of the pseudonodes
       int pseudo_top;

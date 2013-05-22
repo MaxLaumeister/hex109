@@ -3,7 +3,7 @@
 
 void hexGraph::init() {
     // Initialize the game board array
-    int s_size = widthHeight * widthHeight;
+    int s_size = sideLength * sideLength;
     spaces = new vector<Space>(s_size, P_EMPTY);
     
     // Connect the game board graph
@@ -24,11 +24,11 @@ void hexGraph::init() {
 
     // Connect board-edge pseudonodes
     
-    for (int i = 0; i < widthHeight; i++) {
-        addArc(pseudo_top, getIndex(i, widthHeight - 1));
+    for (int i = 0; i < sideLength; i++) {
+        addArc(pseudo_top, getIndex(i, sideLength - 1));
         addArc(pseudo_bottom, getIndex(i, 0));
         addArc(pseudo_left, getIndex(0, i));
-        addArc(pseudo_right, getIndex(widthHeight - 1, i));
+        addArc(pseudo_right, getIndex(sideLength - 1, i));
     }
  
     // DEBUG: Print the graph
@@ -40,16 +40,16 @@ bool hexGraph::isValidSpace(int index) {
 }
 
 bool hexGraph::isValidSpace(int x, int y) {
-    return x >= 0 && y >= 0 && x < widthHeight && y < widthHeight;
+    return x >= 0 && y >= 0 && x < sideLength && y < sideLength;
 }
 
 int hexGraph::getIndex(int x, int y) {
-    return widthHeight*y + x;
+    return sideLength*y + x;
 }
 
 pair<int, int> hexGraph::getCoords(int index) {
-    int x = index % widthHeight;
-    int y = index / widthHeight;
+    int x = index % sideLength;
+    int y = index / sideLength;
     return pair<int, int>(x, y);
 }
 
