@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// This namespace contains all functions that retrieve input from the end user.
+// Functions that retrieve input from the end user.
 
 namespace Player{
     

@@ -25,10 +25,10 @@ void hexGraph::init() {
     // Connect board-edge pseudonodes
     
     for (int i = 0; i < sideLength; i++) {
-        addArc(pseudo_top, getIndex(i, sideLength - 1));
-        addArc(pseudo_bottom, getIndex(i, 0));
-        addArc(pseudo_left, getIndex(0, i));
-        addArc(pseudo_right, getIndex(sideLength - 1, i));
+        addEdge(pseudo_top, getIndex(i, sideLength - 1));
+        addEdge(pseudo_bottom, getIndex(i, 0));
+        addEdge(pseudo_left, getIndex(0, i));
+        addEdge(pseudo_right, getIndex(sideLength - 1, i));
     }
 }
 

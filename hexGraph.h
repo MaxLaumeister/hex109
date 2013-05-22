@@ -27,16 +27,16 @@ class hexGraph : public Graph {
       void setSpace(int index, Space sp);
       void setSpace(int x, int y, Space sp);
       bool isValidMove(int x, int y);
-    private:
-      bool isValidSpace(int index);
-      bool isValidSpace(int x, int y);
-      int sideLength;
-      vector<Space>* spaces;
       // Indexes of the pseudonodes
       int pseudo_top;
       int pseudo_bottom;
       int pseudo_left;
       int pseudo_right;
+    private:
+      bool isValidSpace(int index);
+      bool isValidSpace(int x, int y);
+      int sideLength;
+      vector<Space>* spaces;
 };
 
 #endif  /* HEXGRAPH_H */

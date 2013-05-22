@@ -15,6 +15,8 @@ class Game {
           board = new hexGraph(widthHeight);
           // DEBUG: Print the graph
           cout << *board;
+          // DEBUG: Run Dijkstra
+          cout << board->dijkstra(board->pseudo_top, board->pseudo_bottom);
       }
       ~Game(){
           delete board;
