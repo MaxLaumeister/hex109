@@ -22,7 +22,14 @@ void hexGraph::init() {
 	if (isValidSpace(x + 1, y + 1)) addArc(i, getIndex(x + 1, y + 1));
     }
 
-    // Add graph-edge pseudonodes
+    // Connect board-edge pseudonodes
+    
+    for (int i = 0; i < widthHeight; i++) {
+        addArc(pseudo_top, getIndex(i, widthHeight - 1));
+        addArc(pseudo_bottom, getIndex(i, 0));
+        addArc(pseudo_left, getIndex(0, i));
+        addArc(pseudo_right, getIndex(widthHeight - 1, i));
+    }
  
     // DEBUG: Print the graph
     uglyPrint();
