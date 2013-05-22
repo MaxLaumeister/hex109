@@ -30,9 +30,6 @@ void hexGraph::init() {
         addArc(pseudo_left, getIndex(0, i));
         addArc(pseudo_right, getIndex(sideLength - 1, i));
     }
- 
-    // DEBUG: Print the graph
-    uglyPrint();
 }
 
 bool hexGraph::isValidSpace(int index) {

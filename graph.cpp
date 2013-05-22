@@ -107,17 +107,7 @@ ostream& operator<<(ostream &out, Arc &inArc) {
 // Prettyprint an entire graph
 
 ostream& operator<<(ostream &out, Graph &inGraph) {
-    out << "Graph:" << endl;
-
-    for (int i = 0; i < inGraph.getSize(); i++) {
-        out << i << ": ";
-        for (int j = 0; j < inGraph.nodes.at(i).size(); j++) {
-            out << *(inGraph.nodes.at(i).at(j)) << " ";
-        }
-        out << endl;
-    }
-
-    return out;
+    return inGraph.prettyPrint(out);
 }
 
 string colorToAlpha(Color c) {
@@ -127,7 +117,7 @@ string colorToAlpha(Color c) {
         case BLUE: return "BLU";
         case BLACK: return "BLK";
         case ALL: return "ALL";
-            return "";
+        default: return "";
     }
 }
 
@@ -188,19 +178,36 @@ double Graph::totalCost() {
     return total;
 }
 
+// Prints a graph all pretty, in adjacency list format
+
+ostream& Graph::prettyPrint(ostream &out) {
+    cout << "Graph:" << endl;
+
+    for (int i = 0; i < getSize(); i++) {
+        cout << i << ": ";
+        for (int j = 0; j < nodes.at(i).size(); j++) {
+            cout << *(nodes.at(i).at(j)) << " ";
+        }
+        cout << endl;
+    }
+
+    return cout;
+}
+
 // Prints a graph all ugly, like how it's given to us in the input file.
 
-void Graph::uglyPrint() {
-    cout << getSize() << " " << endl;
+ostream& Graph::uglyPrint(ostream &out) {
+    out << getSize() << " " << endl;
     Arc* currarc;
     for (int source = 0; source < getSize(); source++) {
         int arclen = nodes[source].size();
         for (int arci = 0; arci < arclen; arci++) {
             currarc = nodes[source][arci];
-            cout << currarc->source_node << " "
+            out << currarc->source_node << " "
                  << currarc->target_node << " "
                  << currarc->distance << " "
                  << currarc->color << " " << endl;
         }
     }
+    return out;
 }

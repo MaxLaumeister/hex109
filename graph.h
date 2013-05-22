@@ -64,7 +64,8 @@ public:
     double dijkstra(int node1, int node2, Color color = ALL, bool verbose = false);
     double avgPath(Color color);
     double totalCost();
-    void uglyPrint();
+    ostream& prettyPrint(ostream &out = cout);
+    ostream& uglyPrint(ostream &out = cout);
     friend ostream& operator<<(ostream &out, Graph &inGraph);
 protected:
     int size;

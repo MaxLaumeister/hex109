@@ -13,6 +13,8 @@ class Game {
           turn = 0;
           widthHeight = Player::getBoardSize();
           board = new hexGraph(widthHeight);
+          // DEBUG: Print the graph
+          cout << *board;
       }
       ~Game(){
           delete board;
