@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <list>
 #include <iostream>
 #include <limits>
 #include <algorithm>
@@ -10,13 +9,13 @@ const double DOUBLE_MAX = std::numeric_limits<double>::max();
 
 // Return the length of the shortest path between node1 and node2
 
-double Graph::dijkstra(const int node1, const int node2, const Color color, const bool verbose) {
+list<int> Graph::dijkstra(const int node1, const int node2, const Color color, const bool verbose) {
     vector<double> d_distance = vector<double>(size); // Tentative distance to each node
     list<int> d_unvisited = list<int>(); // List of unvisited nodes
 
     if (node1 >= size || node2 >= size || node1 < 0 || node2 < 0) {
         cerr << "Djikstra: Argument out of bounds." << endl;
-        return -1;
+        return list<int>();
     }
 
     if (verbose || debug) cout << "Djikstra: Finding path from " << node1 << " to " << node2 << "." << endl;
@@ -52,7 +51,7 @@ double Graph::dijkstra(const int node1, const int node2, const Color color, cons
         // Break if the connected component has been traversed
         if (current == -1) {
             if (verbose || debug) cout << "Djikstra: No path found." << endl;
-            return -1;
+            return list<int>();
         }
 
         vector<Arc*> neighbors = nodes.at(current);
@@ -82,7 +81,7 @@ double Graph::dijkstra(const int node1, const int node2, const Color color, cons
         // Break if the target node has been reached.
         if (current == node2) {
             if (verbose || debug) cout << "Djikstra: Path length = " << d_distance.at(node2) << endl;
-            return d_distance.at(node2);
+            return list<int>(d_distance.at(node2));
         }
     }
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <list>
 
 using namespace std;
 
@@ -61,8 +62,7 @@ public:
     void addArc(int node1, int node2, double distance = 1, Color color = NONE);
     void randomFill(double density, int min_distance, int max_distance);
     Graph* prim(vector<Color> colorlist, int startnode = 0) throw (int);
-    double dijkstra(int node1, int node2, Color color = ALL, bool verbose = false);
-    double avgPath(Color color);
+    list<int> dijkstra(int node1, int node2, Color color = ALL, bool verbose = false);
     double totalCost();
     ostream& prettyPrint(ostream &out = cout);
     ostream& uglyPrint(ostream &out = cout);

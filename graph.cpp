@@ -151,22 +151,6 @@ void Graph::randomFill(double density = 0.2, int min_distance = 1, int max_dista
 
 }
 
-// Computes the path length average of 0 to 1, 0 to 2, 0 to 3, ..., 0 to (size-1)
-
-double Graph::avgPath(Color color) {
-    double total = 0;
-    int count = 0;
-    for (int i = 0; i < getSize(); i++) {
-        double path_length = dijkstra(0, i, color);
-        if (path_length != -1) {
-            total += path_length;
-            count++;
-        }
-        if (debug) cout << total << ", ";
-    }
-    return total / static_cast<double> (count);
-}
-
 double Graph::totalCost() {
     double total = 0;
     for (int source = 0; source < getSize(); source++) {
