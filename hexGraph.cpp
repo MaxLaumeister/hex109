@@ -43,6 +43,10 @@ bool hexGraph::isValidSpace(int x, int y) {
     return x >= 0 && y >= 0 && x < sideLength && y < sideLength;
 }
 
+bool hexGraph::isValidMove(int x, int y) {
+    return isValidSpace(x, y) && getSpace(x, y) == P_EMPTY;
+}
+
 int hexGraph::getIndex(int x, int y) {
     return sideLength*y + x;
 }

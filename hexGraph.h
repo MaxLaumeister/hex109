@@ -22,13 +22,14 @@ class hexGraph : public Graph {
       void init();
       int getIndex(int x, int y);
       pair<int, int> getCoords(int index);
-      bool isValidSpace(int index);
-      bool isValidSpace(int x, int y);
       Space getSpace(int index);
       Space getSpace(int x, int y);
       void setSpace(int index, Space sp);
       void setSpace(int x, int y, Space sp);
+      bool isValidMove(int x, int y);
     private:
+      bool isValidSpace(int index);
+      bool isValidSpace(int x, int y);
       int sideLength;
       vector<Space>* spaces;
       // Indexes of the pseudonodes

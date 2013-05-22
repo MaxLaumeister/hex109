@@ -26,6 +26,31 @@ namespace Player{
 	}
 	return size;
     }
+    
+    pair<int, int> getPlayerMove() {
+        int arg = 0;
+        int x;
+        int y;
+        cout << "Player (White) connects horizontally." << endl;
+        cout << "CPU (Black) connects vertically." << endl;
+        while(true) {
+            if (arg == 0) {
+                cout << "Enter move coordinate X: ";
+                cin >> x;
+            } else if (arg == 1) {
+                cout << "Enter move coordinate Y: ";
+                cin >> y;
+            } else break;
+
+            if (cin.fail()) {
+                cout << "Enter a number please!" << endl;
+                cin.clear();
+                cin.ignore(10000, '\n');
+                continue;
+            } else arg++;
+        }
+        return pair<int, int>(x, y);
+    }
 }
 
 
