@@ -10,9 +10,9 @@ void hexGraph::init() {
         addArc(1,i);
         cout << "Arc Added" << endl;
     }
-    
+ 
     // DEBUG: Print the graph
-    cout << *this;
+    uglyPrint();
 }
 
 bool hexGraph::isValidSpace(int index) {
