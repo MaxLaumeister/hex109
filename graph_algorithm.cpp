@@ -14,11 +14,11 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
     list<int> d_unvisited = list<int>(); // List of unvisited nodes
 
     if (node1 >= size || node2 >= size || node1 < 0 || node2 < 0) {
-        cerr << "Djikstra: Argument out of bounds." << endl;
+        cerr << "Dijkstra: Argument out of bounds." << endl;
         return list<int>();
     }
 
-    if (verbose || debug) cout << "Djikstra: Finding path from " << node1 << " to " << node2 << "." << endl;
+    if (verbose || debug) cout << "Dijkstra: Finding path from " << node1 << " to " << node2 << "." << endl;
 
     // Initialize distances
     for (int i = 0; i < size; i++) {
@@ -50,7 +50,7 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
 
         // Break if the connected component has been traversed
         if (current == -1) {
-            if (verbose || debug) cout << "Djikstra: No path found." << endl;
+            if (verbose || debug) cout << "Dijkstra: No path found." << endl;
             return list<int>();
         }
 
@@ -80,7 +80,7 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
 
         // Break if the target node has been reached.
         if (current == node2) {
-            if (verbose || debug) cout << "Djikstra: Path length = " << d_distance.at(node2) << endl;
+            if (verbose || debug) cout << "Dijkstra: Path length = " << d_distance.at(node2) << endl;
             return list<int>(d_distance.at(node2));
         }
     }
