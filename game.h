@@ -1,3 +1,5 @@
+#include <vector>
+#include <cstdlib>
 #include "hexGraph.h"
 #include "player.h"
 
