@@ -3,13 +3,26 @@
 
 void hexGraph::init() {
     // Initialize the game board array
-    spaces = new vector<Space>(widthHeight*widthHeight, P_EMPTY);
+    int s_size = widthHeight * widthHeight;
+    spaces = new vector<Space>(s_size, P_EMPTY);
+    
     // Connect the game board graph
-    cout << "size: " << size << endl;
-    for (int i = 2; i < size; i++) {
-        addArc(1,i);
-        cout << "Arc Added" << endl;
+    pair<int, int> coords;
+    int x, y;
+    for (int i = 0; i < s_size; i++) {
+        coords = getCoords(i);
+        x = coords.first;
+	y = coords.second;
+	// Add all adjacent nodes
+	if (isValidSpace(x - 1, y)) addArc(i, getIndex(x - 1, y));
+	if (isValidSpace(x + 1, y)) addArc(i, getIndex(x + 1, y));
+        if (isValidSpace(x, y - 1)) addArc(i, getIndex(x, y - 1));
+	if (isValidSpace(x - 1, y - 1)) addArc(i, getIndex(x - 1, y - 1));
+	if (isValidSpace(x, y + 1)) addArc(i, getIndex(x, y + 1));
+	if (isValidSpace(x + 1, y + 1)) addArc(i, getIndex(x + 1, y + 1));
     }
+
+    // Add graph-edge pseudonodes
  
     // DEBUG: Print the graph
     uglyPrint();
@@ -20,11 +33,17 @@ bool hexGraph::isValidSpace(int index) {
 }
 
 bool hexGraph::isValidSpace(int x, int y) {
-    return isValidSpace(getIndex(x, y));
+    return x >= 0 && y >= 0 && x < widthHeight && y < widthHeight;
 }
 
 int hexGraph::getIndex(int x, int y) {
     return widthHeight*y + x;
+}
+
+pair<int, int> hexGraph::getCoords(int index) {
+    int x = index % widthHeight;
+    int y = index / widthHeight;
+    return pair<int, int>(x, y);
 }
 
 Space hexGraph::getSpace(int index) {
