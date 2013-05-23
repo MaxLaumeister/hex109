@@ -19,6 +19,9 @@ class hexGraph : public Graph {
       ~hexGraph() {
           delete spaces;
       }
+
+      // Board manipulating functions
+
       void init();
       int getIndex(int x, int y);
       pair<int, int> getCoords(int index);
@@ -28,7 +31,15 @@ class hexGraph : public Graph {
       void setSpace(int x, int y, Space sp);
       bool isValidMove(int x, int y);
       const int sideLength;
+
+      // Underlying graph manipulating functions
+
+      void zeroCostAdjacency(int index);
+      void clearAdjacency(int index);
+      void clearAdjacency(int x, int y);
+
       // Indexes of the pseudonodes
+
       int pseudo_top;
       int pseudo_bottom;
       int pseudo_left;

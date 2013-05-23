@@ -54,6 +54,12 @@ void Game::movePlayer(){
     // Record move in game board
 
     board->setSpace(move.first, move.second, P_WHITE);
+
+    // Update underlying graph to be read by the AI.
+    // This removes all outgoing links from the node,
+    // forcing it out of the Dijkstra calculation.
+
+    board->clearAdjacency(move.first, move.second);
 }
 
 void Game::moveCom(){

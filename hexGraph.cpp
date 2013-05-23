@@ -33,6 +33,14 @@ void hexGraph::init() {
     }
 }
 
+void hexGraph::clearAdjacency(int index) {
+    nodes.at(index).clear();
+}
+
+void hexGraph::clearAdjacency(int x, int y) {
+    clearAdjacency(getIndex(x, y));
+}
+
 bool hexGraph::isValidSpace(int index) {
     return index >= 0 && index < spaces->size();
 }
