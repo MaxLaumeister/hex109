@@ -8,7 +8,8 @@ namespace Player{
     int getBoardSize() {
 	int size;
 	while(true) {
-            cout << "Enter Game Board Size (11 is standard): ";
+            cout << "Enter Game Board Size [default 11]: ";
+            if (cin.peek() == '\n') return 11; // Default value
 	    cin >> size;
 	    if (cin.fail()) {
                 cout << "Enter a number please!" << endl << endl;
