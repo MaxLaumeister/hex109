@@ -123,8 +123,16 @@ Agent Game::checkWinner(){
 
 void Game::drawBoard() {
     
+    string hz = "-";
+ 
     int boardHeight = board->sideLength;
     int boardWidth = boardHeight;
+    
+    int indent = 3;
+    int bannersize = (2 * indent) + 5 + boardWidth * 3 + log10(boardWidth);
+    
+    string vt = "";
+    for (int i = 0; i < indent - 1; i++) vt = vt + " "; // This is sloppy, I know.
 
     // Drawing a nice board ended up being 10x more difficult than I ever
     // thought it could be. Anyway, here's the spaghetti that produces
@@ -132,14 +140,27 @@ void Game::drawBoard() {
 
     // First print out a nice turn banner
 
-    cout << endl << "HEX Turn " << turn << " -----------------------------------------" << endl;
+    cout << endl;
+
+    int turndigits = log10(turn) + 1;
+    int bannerpadding = (bannersize - (11 + turndigits)) / 2;
+
+    for (int i = 0; i < bannerpadding; i++) cout << hz;
+    
+    cout << " HEX Turn " << turn << " ";
+
+    for (int i = 0; i < bannerpadding; i++) cout << hz;
+    if (turndigits % 2 == 0) cout << hz;
+    
+    cout << endl << vt << endl;
 
     // Now the heavy work of printing the board itself
 
     const int totalpadding = log10(boardHeight);
 
     // Print first row of column numbers
-
+    
+    cout << vt;
     for (int i = 0; i < totalpadding + 2; i++) {
         cout << " ";
     }
@@ -156,6 +177,7 @@ void Game::drawBoard() {
     
     // Print second row of column numbers
     
+    cout << vt;
     for (int i = 0; i < totalpadding + 3; i++) {
         cout << " ";
     }
@@ -169,7 +191,9 @@ void Game::drawBoard() {
 
     int intlength;
     for (int i = boardHeight - 1; i >= 0; i--) {
-	// Pad the board on the left to make it a parallelogram
+	cout << vt;
+
+        // Pad the board on the left to make it a parallelogram
 	
 	for (int j = 0; j < boardHeight - i - 1; j++) {
             cout << " ";
@@ -198,7 +222,8 @@ void Game::drawBoard() {
     }
 
     // Print first row of column numbers
-    
+
+    cout << vt;
     for (int i = 0; i < boardWidth + totalpadding + 4; i++) {
         cout << " ";
     }
@@ -210,7 +235,8 @@ void Game::drawBoard() {
     cout << endl;
 
     // Print second row of column numbers
-
+    
+    cout << vt;
     for (int i = 0; i < boardWidth + totalpadding + 5; i++) {
         cout << " ";
     }
@@ -223,6 +249,10 @@ void Game::drawBoard() {
 	    cout << j%10 << " ";
 	}
     }
+    cout << endl << endl;
+    
+    for (int i = 0; i < bannersize; i++) cout << hz;
+
     cout << endl << endl;
     
 }
