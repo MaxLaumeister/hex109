@@ -63,16 +63,55 @@ void Game::movePlayer(){
 }
 
 void Game::moveCom(){
-    //TODO
-
-    // DEBUG: Run Dijkstra
+    // Run Dijkstra
     list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+
+    // Pop off the pseudonodes at the ends of the Djikstra list
+    dij.pop_front();
+    dij.pop_back();
+   
+    // DEBUG: Print Dijkstra results
     cout << "Dijkstra size " << dij.size() << " of board: " << endl;
     for (list<int>::const_iterator itor = dij.begin(), end = dij.end(); itor != end; ++itor) {
         pair<int, int> thispair = board->getCoords(*itor);
-        cout << "(" << thispair.first << ", " << thispair.second << "), ";
+        cout << "(" << thispair.first << ", " << thispair.second << ") -> ";
     }
     cout << endl;
+
+    // Find a suitable move:
+    // Start building a bridge from the center of the shortest path.
+    
+    // Find the center
+    list<int>::const_iterator center = dij.begin();
+    for (int i = 0; i < dij.size() / 2; i++) {
+        center++;
+    }
+
+    // Walk out from the center to find a valid move
+    list<int>::const_iterator walk_left = center;
+    list<int>::const_iterator walk_right = center;
+    list<int>::const_iterator final_move;
+    while(!(walk_left == dij.begin() && walk_right == dij.end())) {
+        if (board->isValidMove(*walk_left)) {
+            final_move = walk_left;
+	    break;
+	}
+        if (board->isValidMove(*walk_right)) {
+            final_move = walk_right;
+	    break;
+	}
+	if (walk_left != dij.begin()) walk_left--;
+	if (walk_right != dij.begin()) walk_right++;
+    }
+
+    board->setSpace(*final_move, P_BLACK);
+
+    // Update underlying graph to be read by the AI.
+    // This makes all outgoing arcs from the move space
+    // have cost zero, giving preference to partially-built
+    // paths in the Dijkstra algorithm.
+
+    board->zeroCostAdjacency(*final_move);
 }
 
 Agent Game::checkWinner(){

@@ -41,6 +41,16 @@ void hexGraph::clearAdjacency(int x, int y) {
     clearAdjacency(getIndex(x, y));
 }
 
+void hexGraph::zeroCostAdjacency(int index) {
+    for (int i = 0; i < nodes.at(index).size(); i++) {
+        nodes.at(index).at(i)->distance = 0;
+    }
+}
+
+void hexGraph::zeroCostAdjacency(int x, int y) {
+    return zeroCostAdjacency(getIndex(x, y));
+}
+
 bool hexGraph::isValidSpace(int index) {
     return index >= 0 && index < spaces->size();
 }
@@ -51,6 +61,10 @@ bool hexGraph::isValidSpace(int x, int y) {
 
 bool hexGraph::isValidMove(int x, int y) {
     return isValidSpace(x, y) && getSpace(x, y) == P_EMPTY;
+}
+
+bool hexGraph::isValidMove(int index) {
+    return isValidSpace(index) && getSpace(index) == P_EMPTY;
 }
 
 int hexGraph::getIndex(int x, int y) {

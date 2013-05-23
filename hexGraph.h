@@ -30,11 +30,13 @@ class hexGraph : public Graph {
       void setSpace(int index, Space sp);
       void setSpace(int x, int y, Space sp);
       bool isValidMove(int x, int y);
+      bool isValidMove(int index);
       const int sideLength;
 
       // Underlying graph manipulating functions
 
       void zeroCostAdjacency(int index);
+      void zeroCostAdjacency(int x, int y);
       void clearAdjacency(int index);
       void clearAdjacency(int x, int y);
 
