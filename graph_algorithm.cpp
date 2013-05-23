@@ -7,11 +7,13 @@
 
 const double DOUBLE_MAX = std::numeric_limits<double>::max();
 
-// Return the length of the shortest path between node1 and node2
+// Return the shortest path between node1 and node2
 
 list<int> Graph::dijkstra(const int node1, const int node2, const Color color, const bool verbose) {
     vector<double> d_distance = vector<double>(size); // Tentative distance to each node
     list<int> d_unvisited = list<int>(); // List of unvisited nodes
+    vector<int> prev(size, -1); // Previous node in the chain
+    list<int> result; // This is our result
 
     if (node1 >= size || node2 >= size || node1 < 0 || node2 < 0) {
         cerr << "Dijkstra: Argument out of bounds." << endl;
@@ -74,6 +76,8 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
             double altdist = currdist + neighbor->distance;
             if (altdist < d_distance.at(neighbor->target_node)) {
                 d_distance.at(neighbor->target_node) = altdist; // Write the updated distance
+		prev[neighbor->target_node] = neighbor->source_node; // Keep track of the previous node
+		cout << "prev: " << neighbor->target_node << ", " << neighbor->source_node << endl;
             }
         }
 
@@ -81,9 +85,19 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
         // Break if the target node has been reached.
         if (current == node2) {
             if (verbose || debug) cout << "Dijkstra: Path length = " << d_distance.at(node2) << endl;
-            return list<int>(d_distance.at(node2));
+            break;
+	    // The distance of this node is d_distance.at(node2).
         }
     }
+
+    // Assemble the shortest path
+    int i = node2;
+    while (i != node1) {
+        result.push_front(i);
+	i = prev[i];
+    }
+    result.push_front(i);
+    return result;
 }
 
 // WARNING: This implementation of Prim's algorithm will only work properly on undirected graphs.

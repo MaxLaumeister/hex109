@@ -14,7 +14,12 @@ class Game {
           // DEBUG: Print the graph
           cout << *board;
           // DEBUG: Run Dijkstra
-          //cout << board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+          list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+          cout << "Dijkstra size " << dij.size() << " of board: " << endl;
+          for (list<int>::const_iterator itor = dij.begin(), end = dij.end(); itor != end; ++itor) {
+              cout << *itor << ", ";
+          }
+          cout << endl;
       }
       ~Game(){
           delete board;
