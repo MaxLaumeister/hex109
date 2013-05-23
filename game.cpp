@@ -67,7 +67,10 @@ void Game::moveCom(){
     // Run Dijkstra
     list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
 
-    // Pop off the pseudonodes at the ends of the Djikstra list
+    // The Dijkstra list comes with shortest path length stuck to the front.
+    // Pop off the path length, then the pseudonodes at both ends of the Djikstra list
+
+    dij.pop_front();
     dij.pop_front();
     dij.pop_back();
    

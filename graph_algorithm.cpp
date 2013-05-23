@@ -7,7 +7,7 @@
 
 const double DOUBLE_MAX = std::numeric_limits<double>::max();
 
-// Return the shortest path between node1 and node2
+// First element of the list is the shortest path length. Proceeding elements are the path itself.
 
 list<int> Graph::dijkstra(const int node1, const int node2, const Color color, const bool verbose) {
     vector<double> d_distance = vector<double>(size); // Tentative distance to each node
@@ -96,6 +96,10 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
 	i = prev[i];
     }
     result.push_front(i);
+    
+    // Shortest path length
+    result.push_front(d_distance.at(node2));
+    
     return result;
 }
 
