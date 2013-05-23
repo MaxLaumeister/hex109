@@ -11,8 +11,6 @@ class Game {
     public:
       Game() : turn(0) {
           board = new hexGraph(Player::getBoardSize());
-          // DEBUG: Print the graph
-          cout << *board;
       }
       ~Game(){
           delete board;

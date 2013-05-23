@@ -77,7 +77,6 @@ list<int> Graph::dijkstra(const int node1, const int node2, const Color color, c
             if (altdist < d_distance.at(neighbor->target_node)) {
                 d_distance.at(neighbor->target_node) = altdist; // Write the updated distance
 		prev[neighbor->target_node] = neighbor->source_node; // Keep track of the previous node
-		cout << "prev: " << neighbor->target_node << ", " << neighbor->source_node << endl;
             }
         }
 

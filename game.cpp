@@ -28,6 +28,7 @@ void Game::beginPlay() {
 void Game::mainLoop() {
     Agent winner;
     while(true) {
+        turn++;
         drawBoard();
 	movePlayer();
 	if (winner = checkWinner()) break;
@@ -71,12 +72,13 @@ void Game::moveCom(){
     dij.pop_back();
    
     // DEBUG: Print Dijkstra results
-    cout << "Dijkstra size " << dij.size() << " of board: " << endl;
+    cout << endl << "Current CPU Strategy (no peeking): " << endl;
+    cout << "TOP * ";
     for (list<int>::const_iterator itor = dij.begin(), end = dij.end(); itor != end; ++itor) {
         pair<int, int> thispair = board->getCoords(*itor);
-        cout << "(" << thispair.first << ", " << thispair.second << ") -> ";
+        cout << "(" << thispair.first << ", " << thispair.second << ") * ";
     }
-    cout << endl;
+    cout << "BOTTOM" << endl;
 
     // Find a suitable move:
     // Start building a bridge from the center of the shortest path.
@@ -128,7 +130,11 @@ void Game::drawBoard() {
     // thought it could be. Anyway, here's the spaghetti that produces
     // a really pretty command-line game board.
 
-    cout << endl;
+    // First print out a nice turn banner
+
+    cout << endl << "HEX Turn " << turn << " -----------------------------------------" << endl;
+
+    // Now the heavy work of printing the board itself
 
     const int totalpadding = log10(boardHeight);
 
