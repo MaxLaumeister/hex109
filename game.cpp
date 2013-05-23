@@ -54,11 +54,19 @@ void Game::movePlayer(){
     // Record move in game board
 
     board->setSpace(move.first, move.second, P_WHITE);
-    // Remember to add checking for move legality here.
 }
 
 void Game::moveCom(){
     //TODO
+
+    // DEBUG: Run Dijkstra
+    list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+    cout << "Dijkstra size " << dij.size() << " of board: " << endl;
+    for (list<int>::const_iterator itor = dij.begin(), end = dij.end(); itor != end; ++itor) {
+        pair<int, int> thispair = board->getCoords(*itor);
+        cout << "(" << thispair.first << ", " << thispair.second << "), ";
+    }
+    cout << endl;
 }
 
 Agent Game::checkWinner(){

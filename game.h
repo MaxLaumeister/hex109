@@ -13,13 +13,6 @@ class Game {
           board = new hexGraph(Player::getBoardSize());
           // DEBUG: Print the graph
           cout << *board;
-          // DEBUG: Run Dijkstra
-          list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
-          cout << "Dijkstra size " << dij.size() << " of board: " << endl;
-          for (list<int>::const_iterator itor = dij.begin(), end = dij.end(); itor != end; ++itor) {
-              cout << *itor << ", ";
-          }
-          cout << endl;
       }
       ~Game(){
           delete board;
