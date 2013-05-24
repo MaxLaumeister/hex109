@@ -38,8 +38,8 @@ void Game::mainLoop() {
 	if (winner = checkWinner()) break;
     }
     drawBoard();
-    if (winner == PLAYER) cout << "Player Wins!";
-    if (winner == COM) cout << "CPU Player Wins!";
+    if (winner == PLAYER) cout << "Player Wins!" << endl;
+    if (winner == COM) cout << "CPU Player Wins!" << endl;
 }
 
 void Game::movePlayer(bool piRule){
@@ -129,9 +129,10 @@ Agent Game::checkWinner(){
     list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
     
     if (dij.empty()) return PLAYER; // No path left; player wins
-    
+
     int shortestComPath = dij.front();
-    
+
+    if (shortestComPath >= 3*board->pseudo_node_distance) return PLAYER;  
     if (shortestComPath == board->pseudo_node_distance) return COM;
     
     return NOBODY;
