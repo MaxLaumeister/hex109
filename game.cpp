@@ -35,6 +35,7 @@ void Game::mainLoop() {
         moveCom();
 	if (winner = checkWinner()) break;
     }
+    drawBoard();
     if (winner == PLAYER) cout << "Player Wins!";
     if (winner == COM) cout << "CPU Player Wins!";
 }
@@ -121,7 +122,16 @@ void Game::moveCom(){
 }
 
 Agent Game::checkWinner(){
-    //TODO
+    list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+    
+    if (dij.empty()) return PLAYER; // No path left; player wins
+    
+    int shortestComPath = dij.front();
+    
+    cout << "shortestComPath: " << shortestComPath << endl;
+    
+    if (shortestComPath == board->pseudo_node_distance) return COM;
+    
     return NOBODY;
 }
 

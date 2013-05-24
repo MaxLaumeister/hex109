@@ -26,8 +26,3 @@ class Game {
       hexGraph* board;
 };
 
-class Move {
-    int x;
-    int y;
-};
-

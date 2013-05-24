@@ -46,6 +46,8 @@ class hexGraph : public Graph {
       int pseudo_bottom;
       int pseudo_left;
       int pseudo_right;
+      
+      int pseudo_node_distance;
     private:
       bool isValidSpace(int index);
       bool isValidSpace(int x, int y);

@@ -24,12 +24,12 @@ void hexGraph::init() {
 
     // Connect board-edge pseudonodes
     
-    const int max_length = sideLength * sideLength;
+    pseudo_node_distance = sideLength * sideLength;
     for (int i = 0; i < sideLength; i++) {
-        addEdge(pseudo_top, getIndex(i, sideLength - 1), max_length);
-        addEdge(pseudo_bottom, getIndex(i, 0), max_length);
-        addEdge(pseudo_left, getIndex(0, i), max_length);
-        addEdge(pseudo_right, getIndex(sideLength - 1, i), max_length);
+        addEdge(pseudo_top, getIndex(i, sideLength - 1), pseudo_node_distance);
+        addEdge(pseudo_bottom, getIndex(i, 0), pseudo_node_distance);
+        addEdge(pseudo_left, getIndex(0, i), pseudo_node_distance);
+        addEdge(pseudo_right, getIndex(sideLength - 1, i), pseudo_node_distance);
     }
 }
 
