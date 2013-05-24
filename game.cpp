@@ -27,6 +27,7 @@ void Game::beginPlay() {
 
 void Game::mainLoop() {
     Agent winner;
+    if (!Player::goesFirst()) moveCom();
     while(true) {
         turn++;
         drawBoard();

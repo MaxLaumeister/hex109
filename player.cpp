@@ -48,6 +48,19 @@ namespace Player{
         }
         return pair<int, int>(x, y);
     }
+    
+    bool goesFirst() {
+        string answer;
+        while(true) {
+            cout << "Who should go first? [P]layer, [C]PU, or [R]andom: ";
+            cin >> answer;
+            answer = answer.substr(0,1); // Extract first letter
+            if (answer == "P" || answer == "p") return true;
+            if (answer == "C" || answer == "c") return false;
+            if (answer == "R" || answer == "r") return (rand() % 2); // Random
+            cout << "Type \"p\", \"c\", or \"r\"." << endl;
+        }
+    }
 }
 
 

@@ -5,6 +5,7 @@ using namespace std;
 namespace Player{
     int getBoardSize();
     pair<int, int> getPlayerMove();
+    bool goesFirst();
 }
 
 
