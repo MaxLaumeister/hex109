@@ -112,7 +112,10 @@ void Game::moveCom(){
 	    break;
 	}
 	if (walk_left != dij.begin()) walk_left--;
-	if (walk_right != dij.begin()) walk_right++;
+	if (walk_right != dij.end()) {
+            walk_right++;
+            if (walk_right == dij.end()) walk_right--; // Take pity on me - I am very tired and I just want to go to bed.
+        }
     }
 
     board->setSpace(*final_move, P_BLACK);
