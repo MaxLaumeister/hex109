@@ -35,7 +35,8 @@ void Game::mainLoop() {
         moveCom();
 	if (winner = checkWinner()) break;
     }
-    // use winner value
+    if (winner == PLAYER) cout << "Player Wins!";
+    if (winner == COM) cout << "CPU Player Wins!";
 }
 
 void Game::movePlayer(){
