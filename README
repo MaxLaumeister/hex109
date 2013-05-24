@@ -1,0 +1,19 @@
+***** GRADER INSTRUCTIONS *****
+
+HOW TO COMPILE:
+    make
+
+HOW TO RUN: 
+    ./asg4
+
+***** ENVIRONMENTS/COMPILERS TESTED *****
+
+unix.ucsc.edu/g++
+RaspberryPi/Debian/g++
+
+***** WHAT DID I LEARN *****
+
+First up, the strategy my program uses: It finds a shortest unblocked path from top to bottom of the board, then starts building it out from the middle of the path. It's not very robust, and it's pretty easy to beat. Given enough time, however, and if you make bad moves, it will eventually maneuvre its way around your pieces. I'm looking forward to adding the Monte Carlo AI to make it a lot better.
+
+This assignment was excellent practice in writing a bunch of classes to work together. I feel like I finally have a solid understanding of header files and their role in the multi-file compilation process. Still think that Java makes more sense in its data hiding though. One of the problems I ran across was that my graph class was not at all suited for the task of finding chains of board game pieces. My graph class was built so that each edge had a color, but what I needed was a system that would allow each node to have a color. I ended up extending my current graph class with a hexGraph class, but even that seems a bit disorganized now. Currently I use the additions to the hexGraph class to keep track of the current board state, yet I use the base graph part of it exclusively for CPU AI strategy. This will probably change in the next assignment, where I will split the hexGraph class into separate hexGraph and hexBoard classes, which will be instantiated and managed separately.
+
