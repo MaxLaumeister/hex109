@@ -16,7 +16,7 @@ class hexGraph : public Graph {
           pseudo_right = pseudo_left + 1;
           init();
       };
-      ~hexGraph() {
+      virtual ~hexGraph() {
           delete spaces;
       }
 

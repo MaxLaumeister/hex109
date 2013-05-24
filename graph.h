@@ -49,7 +49,7 @@ public:
     }
     void init(string inputfile);
 
-    ~Graph();
+    virtual ~Graph();
 
     inline int getSize() {
         return size;
