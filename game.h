@@ -19,7 +19,7 @@ class Game {
       void drawBoard();
     private:
       void mainLoop();
-      void movePlayer();
+      void movePlayer(bool piRule = false);
       void moveCom();
       Agent checkWinner();
       int turn;

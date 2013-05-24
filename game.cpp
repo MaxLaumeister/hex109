@@ -27,11 +27,12 @@ void Game::beginPlay() {
 
 void Game::mainLoop() {
     Agent winner;
-    if (!Player::goesFirst()) moveCom();
+    bool playerWentFirst = Player::goesFirst(); // Get player input
+    if (!playerWentFirst) moveCom();
     while(true) {
         turn++;
         drawBoard();
-	movePlayer();
+	movePlayer(turn == 1 && !playerWentFirst); // Pass whether the pi rule is in effect
 	if (winner = checkWinner()) break;
         moveCom();
 	if (winner = checkWinner()) break;
@@ -41,9 +42,11 @@ void Game::mainLoop() {
     if (winner == COM) cout << "CPU Player Wins!";
 }
 
-void Game::movePlayer(){
+void Game::movePlayer(bool piRule){
 
     pair<int, int> move;
+
+    if (piRule) cout << "(To use the pie rule, move where the CPU player just did.)" << endl;
     
     int badmove = false;
     do {
@@ -53,7 +56,7 @@ void Game::movePlayer(){
         }
         move = Player::getPlayerMove();
         badmove = true;
-    } while (!board->isValidMove(move.first, move.second));
+    } while (!board->isValidMove(move.first, move.second, piRule));
 
     // Record move in game board
 
@@ -128,8 +131,6 @@ Agent Game::checkWinner(){
     if (dij.empty()) return PLAYER; // No path left; player wins
     
     int shortestComPath = dij.front();
-    
-    cout << "shortestComPath: " << shortestComPath << endl;
     
     if (shortestComPath == board->pseudo_node_distance) return COM;
     

@@ -29,8 +29,8 @@ class hexGraph : public Graph {
       Space getSpace(int x, int y);
       void setSpace(int index, Space sp);
       void setSpace(int x, int y, Space sp);
-      bool isValidMove(int x, int y);
-      bool isValidMove(int index);
+      bool isValidMove(int x, int y, bool piRule = false);
+      bool isValidMove(int index, bool piRule = false);
       const int sideLength;
 
       // Underlying graph manipulating functions

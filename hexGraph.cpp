@@ -59,12 +59,12 @@ bool hexGraph::isValidSpace(int x, int y) {
     return x >= 0 && y >= 0 && x < sideLength && y < sideLength;
 }
 
-bool hexGraph::isValidMove(int x, int y) {
-    return isValidSpace(x, y) && getSpace(x, y) == P_EMPTY;
+bool hexGraph::isValidMove(int x, int y, bool piRule) {
+    return isValidSpace(x, y) && (getSpace(x, y) == P_EMPTY || piRule);
 }
 
-bool hexGraph::isValidMove(int index) {
-    return isValidSpace(index) && getSpace(index) == P_EMPTY;
+bool hexGraph::isValidMove(int index, bool piRule) {
+    return isValidSpace(index) && (getSpace(index) == P_EMPTY || piRule);
 }
 
 int hexGraph::getIndex(int x, int y) {
