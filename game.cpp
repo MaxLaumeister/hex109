@@ -65,13 +65,14 @@ void Game::movePlayer(bool piRule){
     // Update underlying graph to be read by the AI.
     // This removes all outgoing links from the node,
     // forcing it out of the Dijkstra calculation.
-
-    board->clearAdjacency(move.first, move.second);
+    
+    int index = board->getIndex(move.first, move.second);
+    cpu_graph->clearAdjacency(index);
 }
 
 void Game::moveCom(){
     // Run Dijkstra
-    list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+    list<int> dij = cpu_graph->dijkstra(cpu_graph->pseudo_top, cpu_graph->pseudo_bottom);
 
     // The Dijkstra list comes with shortest path length stuck to the front.
     // Pop off the path length, then the pseudonodes at both ends of the Djikstra list
@@ -125,18 +126,18 @@ void Game::moveCom(){
     // have cost zero, giving preference to partially-built
     // paths in the Dijkstra algorithm.
 
-    board->zeroCostAdjacency(*final_move);
+    cpu_graph->zeroCostAdjacency(*final_move);
 }
 
 Agent Game::checkWinner(){
-    list<int> dij = board->dijkstra(board->pseudo_top, board->pseudo_bottom);
+    list<int> dij = cpu_graph->dijkstra(cpu_graph->pseudo_top, cpu_graph->pseudo_bottom);
     
     if (dij.empty()) return PLAYER; // No path left; player wins
 
     int shortestComPath = dij.front();
 
-    if (shortestComPath >= 3*board->pseudo_node_distance) return PLAYER;  
-    if (shortestComPath == board->pseudo_node_distance) return COM;
+    if (shortestComPath >= 3*cpu_graph->pseudo_node_distance) return PLAYER;  
+    if (shortestComPath == cpu_graph->pseudo_node_distance) return COM;
     
     return NOBODY;
 }

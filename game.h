@@ -10,7 +10,8 @@ enum Agent {NOBODY, PLAYER, COM};
 class Game {
     public:
       Game() : turn(0) {
-          board = new hexGraph(Player::getBoardSize());
+          board = new hexBoard(Player::getBoardSize());
+          cpu_graph = new hexGraph(board);
       }
       ~Game(){
           delete board;
@@ -23,6 +24,7 @@ class Game {
       void moveCom();
       Agent checkWinner();
       int turn;
-      hexGraph* board;
+      hexBoard* board;
+      hexGraph* cpu_graph;
 };
 
