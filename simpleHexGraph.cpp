@@ -98,10 +98,11 @@ bool simpleHexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space 
     for (int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
         candidate_node = nodes[node1][i];
         if (candidate_node == node2) return true; // Search is over
-        if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color || (*visited)[candidate_node]) {
+        if ((*visited)[candidate_node]) continue;
+        if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color) {
             (*visited)[candidate_node] = true;
             cout << "Node " << candidate_node << " marked as visited." << endl;
-            continue; // If it's visited or the wrong color, throw it out.
+            continue; // If it's the wrong color, throw it out.
         }
         if (DFSLoop(board, nodes[node1][i], node2, color, visited)) return true; // If we find  the node in a subsequent search, return true
     }
