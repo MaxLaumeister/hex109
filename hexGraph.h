@@ -1,37 +1,39 @@
-#ifndef HEXGRAPH_H
-#define HEXGRAPH_H
+#ifndef SIMPLEHEXGRAPH_H
+#define	SIMPLEHEXGRAPH_H
 
-#include "graph.h"
+#include <iostream>
+#include <vector>
+#include <list>
+
 #include "hexBoard.h"
 
-class hexGraph : public Graph {
-    public:
-      // Constructor adds 4 extra nodes to act as board edge pseudonodes.
-      hexGraph(const hexBoard* board) : Graph(board->sideLength * board->sideLength + 4), 
-      sideLength(board->sideLength){
-          pseudo_top = sideLength * sideLength;
-          pseudo_bottom = pseudo_top + 1;
-          pseudo_left = pseudo_bottom + 1;
-          pseudo_right = pseudo_left + 1;
-          init(board);
-      };
+using namespace std;
 
-      void init(const hexBoard* board);
-      const int sideLength;
+// Unweighted undirected graph
 
-      // Underlying graph manipulating functions
-
-      void zeroCostAdjacency(int index);
-      void clearAdjacency(int index);
-
-      // Indexes of the pseudonodes
-
-      int pseudo_top;
-      int pseudo_bottom;
-      int pseudo_left;
-      int pseudo_right;
-      
-      int pseudo_node_distance;
+class hexGraph {
+public:
+    hexGraph(const hexBoard* board) : sideLength(board->sideLength), size(board->sideLength * board->sideLength + 4), nodes(board->sideLength * board->sideLength + 4) {init(board);}
+    void init(const hexBoard* board);
+    friend ostream& operator<<(ostream &out, hexGraph &inGraph);
+    const int size; // Size after factoring in pseudonodes
+    const int sideLength; // Side length that this graph models
+    Space checkWinner(const hexBoard* board);
+    bool hasWon(const hexBoard* board, const Space color);
+    int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE);
+private:
+    bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color);
+    bool DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited);
+    void addEdge(int node1, int node2);
+    void addArc(int node1, int node2);
+    vector< vector<int> > nodes;
+    
+    // Indexes of the pseudonodes
+    int pseudo_top;
+    int pseudo_bottom;
+    int pseudo_left;
+    int pseudo_right;
 };
 
-#endif  /* HEXGRAPH_H */
+#endif	/* SIMPLEHEXGRAPH_H */
+

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 #include "game.h"
-#include "simpleHexGraph.h"
+#include "hexGraph.h"
 
 using namespace std;
 
@@ -22,15 +22,11 @@ ostream& operator<<(ostream &out, Space sp) {
    return out;
 }
 
-void Game::beginPlay() {
-    mainLoop();
-}
-
-void Game::mainLoop() {
+void Game::gameLoop() {
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) board->setSpace(board->sideLength/2, board->sideLength/4, P_BLACK);
-    simpleHexGraph gameGraph(board);// DEBUG
+    hexGraph gameGraph(board);// DEBUG
     while(true) {
         turn++;
         drawBoard();
@@ -63,72 +59,6 @@ void Game::movePlayer(bool piRule){
     // Record move in game board
 
     board->setSpace(move.first, move.second, P_WHITE);
-
-    // Update underlying graph to be read by the AI.
-    // This removes all outgoing links from the node,
-    // forcing it out of the Dijkstra calculation.
-    
-    int index = board->getIndex(move.first, move.second);
-    cpu_graph->clearAdjacency(index);
-}
-
-void Game::moveCom(){
-    // Run Dijkstra
-    list<int> dij = cpu_graph->dijkstra(cpu_graph->pseudo_top, cpu_graph->pseudo_bottom);
-
-    // The Dijkstra list comes with shortest path length stuck to the front.
-    // Pop off the path length, then the pseudonodes at both ends of the Djikstra list
-
-    dij.pop_front();
-    dij.pop_front();
-    dij.pop_back();
-   
-    // DEBUG: Print Dijkstra results
-    cout << endl << "Current CPU Strategy (no peeking): " << endl;
-    cout << "TOP * ";
-    for (list<int>::const_iterator itor = dij.begin(), end = dij.end(); itor != end; ++itor) {
-        pair<int, int> thispair = board->getCoords(*itor);
-        cout << "(" << thispair.first << ", " << thispair.second << ") * ";
-    }
-    cout << "BOTTOM" << endl;
-
-    // Find a suitable move:
-    // Start building a bridge from the center of the shortest path.
-    
-    // Find the center
-    list<int>::const_iterator center = dij.begin();
-    for (int i = 0; i < dij.size() / 2; i++) {
-        center++;
-    }
-
-    // Walk out from the center to find a valid move
-    list<int>::const_iterator walk_left = center;
-    list<int>::const_iterator walk_right = center;
-    list<int>::const_iterator final_move;
-    while(!(walk_left == dij.begin() && walk_right == dij.end())) {
-        if (board->isValidMove(*walk_left)) {
-            final_move = walk_left;
-	    break;
-	}
-        if (board->isValidMove(*walk_right)) {
-            final_move = walk_right;
-	    break;
-	}
-	if (walk_left != dij.begin()) walk_left--;
-	if (walk_right != dij.end()) {
-            walk_right++;
-            if (walk_right == dij.end()) walk_right--; // Take pity on me - I am very tired and I just want to go to bed.
-        }
-    }
-
-    board->setSpace(*final_move, P_BLACK);
-
-    // Update underlying graph to be read by the AI.
-    // This makes all outgoing arcs from the move space
-    // have cost zero, giving preference to partially-built
-    // paths in the Dijkstra algorithm.
-
-    cpu_graph->zeroCostAdjacency(*final_move);
 }
 
 void Game::drawBoard() {

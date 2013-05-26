@@ -7,7 +7,7 @@ using namespace std;
 int main() {
     srand(time(0));
     Game newGame;
-    newGame.beginPlay();
+    newGame.gameLoop();
     return 0;
 }
 
