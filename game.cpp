@@ -37,7 +37,7 @@ void Game::mainLoop() {
 	movePlayer(turn == 1 && !playerWentFirst); // Pass whether the pi rule is in effect
 	if (winner = gameGraph.checkWinner(board)) break;
         moveCom();
-        gameGraph.getMonteCarloMove(board, 100); // 100 Iterations
+        gameGraph.getMonteCarloMove(board, 1000); // 1000 Iterations
 	if (winner = gameGraph.checkWinner(board)) break;
     }
     drawBoard();

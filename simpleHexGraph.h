@@ -20,7 +20,7 @@ public:
     const int sideLength; // Side length that this graph models
     Space checkWinner(const hexBoard* board);
     bool hasWon(const hexBoard* board, const Space color);
-    void getMonteCarloMove(const hexBoard* board, int iterations, Space thisMove = P_BLACK, Space lastMove = P_WHITE);
+    int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE);
 private:
     bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color);
     bool DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited);

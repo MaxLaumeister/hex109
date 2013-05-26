@@ -76,9 +76,7 @@ inline bool simpleHexGraph::hasWon(const hexBoard* board, const Space color) {
 }
 
 Space simpleHexGraph::checkWinner(const hexBoard* board) {
-    cout << "Checking if White Wins" << endl;
     if (hasWon(board, P_WHITE)) return P_WHITE;
-    cout << "Checking if Black Wins" << endl;
     if (hasWon(board, P_BLACK)) return P_BLACK;
     return P_EMPTY;
 }
@@ -91,7 +89,6 @@ bool simpleHexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2,
 }
 
 bool simpleHexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited) {
-    cout << "DFS on " << node1 << endl;
     (*visited)[node1] = true; // Set node 1 as visited
     int node_list_size = nodes[node1].size();
     int candidate_node;
@@ -101,7 +98,6 @@ bool simpleHexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space 
         if ((*visited)[candidate_node]) continue;
         if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color) {
             (*visited)[candidate_node] = true;
-            cout << "Node " << candidate_node << " marked as visited." << endl;
             continue; // If it's the wrong color, throw it out.
         }
         if (DFSLoop(board, nodes[node1][i], node2, color, visited)) return true; // If we find  the node in a subsequent search, return true
@@ -111,8 +107,50 @@ bool simpleHexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space 
 
 // Put it all together!
 
-void simpleHexGraph::getMonteCarloMove(const hexBoard* board, int iterations, Space thisMove, Space lastMove){
-    cout << "Monte Carlo Start" << endl;
-    cout << "Is Connected: ";
-    cout << isConnectedDFS(board, pseudo_bottom, pseudo_top ,thisMove) << endl;
+int simpleHexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, const Space currentMove, const Space lastMove){
+    // Count the number of unused spaces on the board
+    int unused_spaces_count = 0;
+    vector<int> unused_spaces;
+    for (int i = 0; i < board->getSize(); i++) {
+        if (board->getSpace(i) == P_EMPTY) {
+            unused_spaces_count++;
+            unused_spaces.push_back(i);
+        }
+    }
+    // Fill a vector with alternating moves
+    vector<Space> random_chips(unused_spaces_count - 1);
+    for (int i = 0; i < unused_spaces_count - 1; i++) {
+        if (i % 2 == 0) random_chips[i] = currentMove;
+        else random_chips[i] = lastMove;
+    }
+    // Begin Monte Carlo
+    int best_move = -1;
+    int best_move_wins = 0;
+    hexBoard carlo_board(*board); // Create a working board for iteration
+    for (int carlo_move_unusedspaces_index = 0; carlo_move_unusedspaces_index < unused_spaces_count; carlo_move_unusedspaces_index++) { // For each unused space
+        carlo_board.setSpace(unused_spaces[carlo_move_unusedspaces_index], currentMove); // Make a move in that space
+        // Then run Monte Carlo on the new configuration
+        int wins = 0;
+        for (int i = 0; i < iterations; i++) { // Iterate over random shuffles
+            random_shuffle(random_chips.begin(), random_chips.end()); //  Shuffle the chips
+            int i = 0;
+            int j = 0;
+            while (i < unused_spaces_count - 1) {
+                if (j == carlo_move_unusedspaces_index) { // Skip over the space containing the move we made
+                    j++;
+                    continue;
+                }
+                carlo_board.setSpace(unused_spaces[j], random_chips[i]); // Copy them into the board
+                j++;
+                i++;
+            }
+            if (hasWon(&carlo_board, currentMove)) wins++; // Check to see if it is a win
+        }
+        if (wins > best_move_wins) {
+            best_move_wins = wins;
+            best_move = unused_spaces[carlo_move_unusedspaces_index];
+        }
+        cout << "Move Weight: " << wins << " / " << iterations << endl;
+    }
+    
 }

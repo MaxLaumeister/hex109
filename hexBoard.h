@@ -14,12 +14,17 @@ class hexBoard {
       hexBoard(int thisSideLength): sideLength(thisSideLength){
           spaces = new vector<Space>(sideLength * sideLength, P_EMPTY);
       };
+      // Copy constructor
+      hexBoard(hexBoard const &oldBoard): sideLength(oldBoard.sideLength){
+          spaces = new vector<Space>(*(oldBoard.spaces));
+      }
       virtual ~hexBoard() {
           delete spaces;
       }
 
       // Board manipulating functions
 
+      inline int getSize() const {return spaces->size();}
       int getIndex(int x, int y) const;
       pair<int, int> getCoords(int index) const;
       Space getSpace(int index) const;
