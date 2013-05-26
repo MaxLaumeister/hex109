@@ -25,7 +25,7 @@ ostream& operator<<(ostream &out, Space sp) {
 void Game::gameLoop() {
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
-    if (!playerWentFirst) board->setSpace(board->sideLength/2, board->sideLength/4, P_BLACK);
+    if (!playerWentFirst) board->setSpace(2, 2, P_BLACK); // I read somewhere that 2,2 is a balanced opening move (remember pie rule).
     hexGraph gameGraph(board);// DEBUG
     int comMoveIndex = -1;
     while(true) {

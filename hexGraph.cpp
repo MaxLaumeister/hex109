@@ -117,9 +117,9 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, con
     }
     // Fill a vector with alternating moves
     vector<Space> random_chips(unused_spaces_count - 1);
-    for (int i = 0; i < unused_spaces_count - 1; i++) {
-        if (i % 2 == 0) random_chips[i] = currentMove;
-        else random_chips[i] = lastMove;
+    for (int i = 0; i < unused_spaces_count - 1; i++) { // We will place our chip on the board, so the next move will be the other player's
+        if (i % 2 == 0) random_chips[i] = lastMove;
+        else random_chips[i] = currentMove;
     }
     // Begin Monte Carlo
     int best_move = -1;
