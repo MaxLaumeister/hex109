@@ -134,7 +134,7 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, con
         carlo_board.setSpace(unused_spaces[carlo_move_unusedspaces_index], currentMove); // Make a move in that space
         // Then run Monte Carlo on the new configuration
         int wins = 0;
-        for (int i = 0; i < iterations; i++) { // Iterate over random shuffles
+        for (int ii = 0; ii < iterations; ii++) { // Iterate over random shuffles
             random_shuffle(random_chips.begin(), random_chips.end()); //  Shuffle the chips
             int i = 0;
             int j = 0;
