@@ -22,6 +22,7 @@ public:
     bool hasWon(const hexBoard* board, const Space color);
     int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE);
 private:
+    vector<int> getMonteCarloWeights(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove);
     bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color);
     void addEdge(int node1, int node2);
     void addArc(int node1, int node2);

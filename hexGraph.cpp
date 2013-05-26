@@ -110,7 +110,8 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space
 
 // Put it all together!
 
-int hexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, const Space currentMove, const Space lastMove){
+vector<int> hexGraph::getMonteCarloWeights(const hexBoard* board, const int iterations, const Space currentMove, const Space lastMove){
+    vector<int> move_weights(board->getSize(), 0);
     // Count the number of unused spaces on the board
     int unused_spaces_count = 0;
     vector<int> unused_spaces;
@@ -127,8 +128,6 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, con
         else random_chips[i] = currentMove;
     }
     // Begin Monte Carlo
-    int best_move = -1;
-    int best_move_wins = 0;
     hexBoard carlo_board(*board); // Create a working board for iteration
     for (int carlo_move_unusedspaces_index = 0; carlo_move_unusedspaces_index < unused_spaces_count; carlo_move_unusedspaces_index++) { // For each unused space
         carlo_board.setSpace(unused_spaces[carlo_move_unusedspaces_index], currentMove); // Make a move in that space
@@ -149,10 +148,33 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, con
             }
             if (hasWon(&carlo_board, currentMove)) wins++; // Check to see if it is a win
         }
-        if (wins > best_move_wins) {
-            best_move_wins = wins;
-            best_move = unused_spaces[carlo_move_unusedspaces_index];
+        // Record the times won as the "move weight"
+        move_weights[unused_spaces[carlo_move_unusedspaces_index]] = wins;
+    }
+    return move_weights;
+}
+
+int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove) {
+    // Get move weights for a certain amount of iterations
+    vector<int> move_weights = getMonteCarloWeights(board, iterations, currentMove, lastMove);
+    
+    // DEBUG: Print all move weights
+    //for (int i = 0; i < move_weights.size(); i++) cout << move_weights[i] << " ";
+    //cout << endl;
+    
+    // Extract the best move from the vector of move weights
+    int best_move_index;
+    int best_move_weight = 0;
+    for (int i = 0; i < move_weights.size(); i++) {
+        if (move_weights[i] > best_move_weight) {
+            best_move_index = i;
+            best_move_weight = move_weights[i];
         }
     }
-    return best_move;
+    
+    // Print the best move out for the player
+    pair<int, int> bmc = board->getCoords(best_move_index);
+    cout << "Best Move Found: (" << bmc.first << ", " << bmc.second << ") with weight " << best_move_weight << endl;
+    
+    return best_move_index;
 }
