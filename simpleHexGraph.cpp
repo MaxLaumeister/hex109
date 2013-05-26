@@ -8,15 +8,15 @@ using namespace std;
 
 void simpleHexGraph::init(const hexBoard* board) {
     // Initialize the pseudonodes
-    pseudo_top = size;
-    pseudo_bottom = pseudo_top + 1;
-    pseudo_left = pseudo_bottom + 1;
-    pseudo_right = pseudo_left + 1;
+    pseudo_top = size - 4;
+    pseudo_bottom = size - 3;
+    pseudo_left = size - 2;
+    pseudo_right = size - 1;
           
     // Connect the game board graph
     pair<int, int> coords;
     int x, y;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size - 4; i++) {
         coords = board->getCoords(i);
         x = coords.first;
 	y = coords.second;
@@ -36,6 +36,8 @@ void simpleHexGraph::init(const hexBoard* board) {
         addEdge(pseudo_left, board->getIndex(0, i));
         addEdge(pseudo_right, board->getIndex(sideLength - 1, i));
     }
+    
+    cout << *this;
 }
 
 // Prettyprint an entire graph
@@ -67,26 +69,49 @@ inline void simpleHexGraph::addArc(int node1, int node2) {
     nodes[node1].push_back(node2);
 }
 
-inline bool simpleHexGraph::hasWon(Space color, const hexBoard* board) {
-    if (color == P_WHITE) return isConnectedDFS(pseudo_left, pseudo_right, P_WHITE);
-    if (color == P_BLACK) return isConnectedDFS(pseudo_top, pseudo_bottom, P_BLACK);
-    assert(false); // Color should always be either black or white.
+inline bool simpleHexGraph::hasWon(const hexBoard* board, const Space color) {
+    if (color == P_BLACK) return isConnectedDFS(board, pseudo_bottom, pseudo_top, P_BLACK);
+    if (color == P_WHITE) return isConnectedDFS(board, pseudo_left, pseudo_right, P_WHITE);
+    assert(color != P_EMPTY); // Color should always be either black or white.
 }
 
-inline Space simpleHexGraph::checkWinner(const hexBoard* board) {
-    if (hasWon(P_WHITE, board)) return P_WHITE;
-    if (hasWon(P_BLACK, board)) return P_BLACK;
+Space simpleHexGraph::checkWinner(const hexBoard* board) {
+    cout << "Checking if White Wins" << endl;
+    if (hasWon(board, P_WHITE)) return P_WHITE;
+    cout << "Checking if Black Wins" << endl;
+    if (hasWon(board, P_BLACK)) return P_BLACK;
     return P_EMPTY;
 }
 
 // Depth first search to see if nodes are connected
 
-bool simpleHexGraph::isConnectedDFS(int node1, int node2, Space color){
-    
+bool simpleHexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color){
+    vector<int> visited(size, false);
+    return DFSLoop(board, node1, node2, color, &visited);
+}
+
+bool simpleHexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited) {
+    cout << "DFS on " << node1 << endl;
+    (*visited)[node1] = true; // Set node 1 as visited
+    int node_list_size = nodes[node1].size();
+    int candidate_node;
+    for (int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
+        candidate_node = nodes[node1][i];
+        if (candidate_node == node2) return true; // Search is over
+        if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color || (*visited)[candidate_node]) {
+            (*visited)[candidate_node] = true;
+            cout << "Node " << candidate_node << " marked as visited." << endl;
+            continue; // If it's visited or the wrong color, throw it out.
+        }
+        if (DFSLoop(board, nodes[node1][i], node2, color, visited)) return true; // If we find  the node in a subsequent search, return true
+    }
+    return false;
 }
 
 // Put it all together!
 
 void simpleHexGraph::getMonteCarloMove(const hexBoard* board, int iterations, Space thisMove, Space lastMove){
-    
+    cout << "Monte Carlo Start" << endl;
+    cout << "Is Connected: ";
+    cout << isConnectedDFS(board, pseudo_bottom, pseudo_top ,thisMove) << endl;
 }

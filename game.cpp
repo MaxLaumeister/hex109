@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 #include "game.h"
+#include "simpleHexGraph.h"
 
 using namespace std;
 
@@ -26,20 +27,22 @@ void Game::beginPlay() {
 }
 
 void Game::mainLoop() {
-    Agent winner;
+    Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) moveCom();
+    simpleHexGraph gameGraph(board);// DEBUG
     while(true) {
         turn++;
         drawBoard();
 	movePlayer(turn == 1 && !playerWentFirst); // Pass whether the pi rule is in effect
-	if (winner = checkWinner()) break;
+	if (winner = gameGraph.checkWinner(board)) break;
         moveCom();
-	if (winner = checkWinner()) break;
+        gameGraph.getMonteCarloMove(board, 100); // 100 Iterations
+	if (winner = gameGraph.checkWinner(board)) break;
     }
     drawBoard();
-    if (winner == PLAYER) cout << "Player Wins!" << endl;
-    if (winner == COM) cout << "CPU Player Wins!" << endl;
+    if (winner == P_WHITE) cout << "Player Wins!" << endl;
+    if (winner == P_BLACK) cout << "CPU Player Wins!" << endl;
 }
 
 void Game::movePlayer(bool piRule){
@@ -127,19 +130,6 @@ void Game::moveCom(){
     // paths in the Dijkstra algorithm.
 
     cpu_graph->zeroCostAdjacency(*final_move);
-}
-
-Agent Game::checkWinner(){
-    list<int> dij = cpu_graph->dijkstra(cpu_graph->pseudo_top, cpu_graph->pseudo_bottom);
-    
-    if (dij.empty()) return PLAYER; // No path left; player wins
-
-    int shortestComPath = dij.front();
-
-    if (shortestComPath >= 3*cpu_graph->pseudo_node_distance) return PLAYER;  
-    if (shortestComPath == cpu_graph->pseudo_node_distance) return COM;
-    
-    return NOBODY;
 }
 
 void Game::drawBoard() {

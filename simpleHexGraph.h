@@ -13,16 +13,17 @@ using namespace std;
 
 class simpleHexGraph {
 public:
-    simpleHexGraph(const hexBoard* board) : sideLength(board->sideLength), size(sideLength * sideLength), nodes(vector< vector<int> >(size)) {init(board);}
+    simpleHexGraph(const hexBoard* board) : sideLength(board->sideLength), size(board->sideLength * board->sideLength + 4), nodes(board->sideLength * board->sideLength + 4) {init(board);}
     void init(const hexBoard* board);
     friend ostream& operator<<(ostream &out, simpleHexGraph &inGraph);
     const int size; // Size after factoring in pseudonodes
     const int sideLength; // Side length that this graph models
     Space checkWinner(const hexBoard* board);
-    bool hasWon(Space color, const hexBoard* board);
+    bool hasWon(const hexBoard* board, const Space color);
     void getMonteCarloMove(const hexBoard* board, int iterations, Space thisMove = P_BLACK, Space lastMove = P_WHITE);
 private:
-    bool isConnectedDFS(int node1, int node2, Space color);
+    bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color);
+    bool DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited);
     void addEdge(int node1, int node2);
     void addArc(int node1, int node2);
     vector< vector<int> > nodes;
