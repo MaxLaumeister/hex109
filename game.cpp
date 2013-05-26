@@ -29,15 +29,14 @@ void Game::beginPlay() {
 void Game::mainLoop() {
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
-    if (!playerWentFirst) moveCom();
+    if (!playerWentFirst) board->setSpace(board->sideLength/2, board->sideLength/4, P_BLACK);
     simpleHexGraph gameGraph(board);// DEBUG
     while(true) {
         turn++;
         drawBoard();
 	movePlayer(turn == 1 && !playerWentFirst); // Pass whether the pi rule is in effect
 	if (winner = gameGraph.checkWinner(board)) break;
-        moveCom();
-        gameGraph.getMonteCarloMove(board, 1000); // 1000 Iterations
+        board->setSpace(gameGraph.getMonteCarloMove(board, 1000), P_BLACK); // 1000 Iterations
 	if (winner = gameGraph.checkWinner(board)) break;
     }
     drawBoard();

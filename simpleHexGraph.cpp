@@ -152,5 +152,6 @@ int simpleHexGraph::getMonteCarloMove(const hexBoard* board, const int iteration
         }
         cout << "Move Weight: " << wins << " / " << iterations << endl;
     }
-    
+    cout << "Best Move: " << best_move << endl;
+    return best_move;
 }
