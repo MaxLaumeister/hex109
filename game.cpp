@@ -27,12 +27,20 @@ void Game::gameLoop() {
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) board->setSpace(board->sideLength/2, board->sideLength/4, P_BLACK);
     hexGraph gameGraph(board);// DEBUG
+    int comMoveIndex = -1;
     while(true) {
         turn++;
         drawBoard();
+        if (comMoveIndex != -1) { // Remind the player of where the CPU went
+            pair<int, int> comMove = board->getCoords(comMoveIndex);
+            cout << "Black just moved (" << comMove.first << ", " << comMove.second << ")." << endl;
+        }
 	movePlayer(turn == 1 && !playerWentFirst); // Pass whether the pi rule is in effect
+        drawBoard();
 	if (winner = gameGraph.checkWinner(board)) break;
-        board->setSpace(gameGraph.getMonteCarloMove(board, 1000), P_BLACK); // 1000 Iterations
+        cout << "Calculating optimal CPU move..." << endl;
+        comMoveIndex = gameGraph.getMonteCarloMove(board, 1000); // Calculate move
+        board->setSpace(comMoveIndex, P_BLACK);
 	if (winner = gameGraph.checkWinner(board)) break;
     }
     drawBoard();

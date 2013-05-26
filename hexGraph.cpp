@@ -36,8 +36,6 @@ void hexGraph::init(const hexBoard* board) {
         addEdge(pseudo_left, board->getIndex(0, i));
         addEdge(pseudo_right, board->getIndex(sideLength - 1, i));
     }
-    
-    cout << *this;
 }
 
 // Prettyprint an entire graph
@@ -150,8 +148,6 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, const int iterations, con
             best_move_wins = wins;
             best_move = unused_spaces[carlo_move_unusedspaces_index];
         }
-        cout << "Move Weight: " << wins << " / " << iterations << endl;
     }
-    cout << "Best Move: " << best_move << endl;
     return best_move;
 }
