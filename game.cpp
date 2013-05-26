@@ -23,6 +23,7 @@ ostream& operator<<(ostream &out, Space sp) {
 }
 
 void Game::gameLoop() {
+    int monte_carlo_iterations = 5000;
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) board->setSpace(2, 2, P_BLACK); // I read somewhere that 2,2 is a balanced opening move (remember pie rule).
@@ -39,7 +40,14 @@ void Game::gameLoop() {
         drawBoard();
 	if (winner = gameGraph.checkWinner(board)) break;
         cout << "Calculating optimal CPU move..." << endl;
-        comMoveIndex = gameGraph.getMonteCarloMove(board, 1000); // Calculate move
+        if (turn == 1) {
+            // Calculate move on a fresh board, because we can pie away the opponent's move if needed
+            hexBoard temp(board->sideLength); // Fresh board with same dimensions
+            comMoveIndex = gameGraph.getMonteCarloMove(&temp, monte_carlo_iterations);
+            if (board->getSpace(comMoveIndex) == P_WHITE) cout << "CPU Player took your Pie!" << endl;
+        } else {
+            comMoveIndex = gameGraph.getMonteCarloMove(board, monte_carlo_iterations); // Calculate move
+        }
         board->setSpace(comMoveIndex, P_BLACK);
 	if (winner = gameGraph.checkWinner(board)) break;
     }

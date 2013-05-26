@@ -82,27 +82,23 @@ Space hexGraph::checkWinner(const hexBoard* board) {
 
 // Depth first search to see if nodes are connected
 
-bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color){
+bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) {
     vector<int> visited(size, false);
-    return DFSLoop(board, node1, node2, color, &visited);
-}
-
-bool hexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited) {
     stack<int> s;
     s.push(node1);
     int currnode;
     while (!s.empty()) {
         currnode = s.top();
         s.pop(); // Pop the top node off the stack
-        (*visited)[currnode] = true; // Set node 1 as visited
+        visited[currnode] = true; // Set node 1 as visited
         int node_list_size = nodes[currnode].size();
         int candidate_node;
         for (int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
             candidate_node = nodes[currnode][i];
             if (candidate_node == node2) return true; // Search is over
-            if ((*visited)[candidate_node]) continue;
+            if (visited[candidate_node]) continue;
             if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color) {
-                (*visited)[candidate_node] = true;
+                visited[candidate_node] = true;
                 continue; // If it's the wrong color, throw it out.
             }
             s.push(nodes[currnode][i]); // Push the new node onto the search stack

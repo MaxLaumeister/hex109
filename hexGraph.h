@@ -23,7 +23,6 @@ public:
     int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE);
 private:
     bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color);
-    bool DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited);
     void addEdge(int node1, int node2);
     void addArc(int node1, int node2);
     vector< vector<int> > nodes;
