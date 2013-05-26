@@ -1,6 +1,7 @@
 #include <stack>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include <assert.h>
 
 #include "hexGraph.h"
