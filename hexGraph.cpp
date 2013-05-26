@@ -1,3 +1,4 @@
+#include <stack>
 #include <vector>
 #include <iostream>
 #include <assert.h>
@@ -87,18 +88,25 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space
 }
 
 bool hexGraph::DFSLoop(const hexBoard* board, int node1, int node2, Space color, vector<int>* visited) {
-    (*visited)[node1] = true; // Set node 1 as visited
-    int node_list_size = nodes[node1].size();
-    int candidate_node;
-    for (int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
-        candidate_node = nodes[node1][i];
-        if (candidate_node == node2) return true; // Search is over
-        if ((*visited)[candidate_node]) continue;
-        if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color) {
-            (*visited)[candidate_node] = true;
-            continue; // If it's the wrong color, throw it out.
+    stack<int> s;
+    s.push(node1);
+    int currnode;
+    while (!s.empty()) {
+        currnode = s.top();
+        s.pop(); // Pop the top node off the stack
+        (*visited)[currnode] = true; // Set node 1 as visited
+        int node_list_size = nodes[currnode].size();
+        int candidate_node;
+        for (int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
+            candidate_node = nodes[currnode][i];
+            if (candidate_node == node2) return true; // Search is over
+            if ((*visited)[candidate_node]) continue;
+            if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color) {
+                (*visited)[candidate_node] = true;
+                continue; // If it's the wrong color, throw it out.
+            }
+            s.push(nodes[currnode][i]); // Push the new node onto the search stack
         }
-        if (DFSLoop(board, nodes[node1][i], node2, color, visited)) return true; // If we find  the node in a subsequent search, return true
     }
     return false;
 }
