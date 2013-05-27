@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <assert.h>
+#include <thread>
 
 #include "hexGraph.h"
 
@@ -69,13 +70,13 @@ inline void hexGraph::addArc(int node1, int node2) {
     nodes[node1].push_back(node2);
 }
 
-inline bool hexGraph::hasWon(const hexBoard* board, const Space color) {
+inline bool hexGraph::hasWon(const hexBoard* board, const Space color) const {
     if (color == P_BLACK) return isConnectedDFS(board, pseudo_bottom, pseudo_top, P_BLACK);
     if (color == P_WHITE) return isConnectedDFS(board, pseudo_left, pseudo_right, P_WHITE);
     assert(color != P_EMPTY); // Color should always be either black or white.
 }
 
-Space hexGraph::checkWinner(const hexBoard* board) {
+Space hexGraph::checkWinner(const hexBoard* board) const {
     if (hasWon(board, P_WHITE)) return P_WHITE;
     if (hasWon(board, P_BLACK)) return P_BLACK;
     return P_EMPTY;
@@ -83,7 +84,7 @@ Space hexGraph::checkWinner(const hexBoard* board) {
 
 // Depth first search to see if nodes are connected
 
-bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) {
+bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const {
     vector<int> visited(size, false);
     stack<int> s;
     s.push(node1);
@@ -108,15 +109,15 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space
     return false;
 }
 
-// Put it all together!
+// Move weights are stored in move_weights input
 
-vector<int> hexGraph::getMonteCarloWeights(const hexBoard* board, const int iterations, const Space currentMove, const Space lastMove){
-    vector<int> move_weights(board->getSize(), 0);
+void hexGraph::getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, const int iterations, const Space currentMove, const Space lastMove) const{
+    assert(move_weights.size() == board.getSize());
     // Count the number of unused spaces on the board
     int unused_spaces_count = 0;
     vector<int> unused_spaces;
-    for (int i = 0; i < board->getSize(); i++) {
-        if (board->getSpace(i) == P_EMPTY) {
+    for (int i = 0; i < board.getSize(); i++) {
+        if (board.getSpace(i) == P_EMPTY) {
             unused_spaces_count++;
             unused_spaces.push_back(i);
         }
@@ -128,7 +129,7 @@ vector<int> hexGraph::getMonteCarloWeights(const hexBoard* board, const int iter
         else random_chips[i] = currentMove;
     }
     // Begin Monte Carlo
-    hexBoard carlo_board(*board); // Create a working board for iteration
+    hexBoard carlo_board(board); // Create a working board for iteration
     for (int carlo_move_unusedspaces_index = 0; carlo_move_unusedspaces_index < unused_spaces_count; carlo_move_unusedspaces_index++) { // For each unused space
         carlo_board.setSpace(unused_spaces[carlo_move_unusedspaces_index], currentMove); // Make a move in that space
         // Then run Monte Carlo on the new configuration
@@ -151,24 +152,75 @@ vector<int> hexGraph::getMonteCarloWeights(const hexBoard* board, const int iter
         // Record the times won as the "move weight"
         move_weights[unused_spaces[carlo_move_unusedspaces_index]] = wins;
     }
-    return move_weights;
 }
 
-int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove) {
-    // Get move weights for a certain amount of iterations
-    vector<int> move_weights = getMonteCarloWeights(board, iterations, currentMove, lastMove);
+int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove) const{
+    const unsigned int threads = thread::hardware_concurrency();
+    const int iters_per_thread = iterations / threads;
+    const int board_size = board->getSize();
     
-    // DEBUG: Print all move weights
-    //for (int i = 0; i < move_weights.size(); i++) cout << move_weights[i] << " ";
-    //cout << endl;
+    // Create an vector to hold the results of each thread
+    vector< vector<int>* > results(threads - 1);
+    
+    // Initialize all of the results vectors
+    for (int i = 0; i < threads - 1; i++) {
+        results[i] = new vector<int>(board_size, 0);
+    }
+    
+    // Set off monte carlo threads
+    vector<thread> thread_ids(threads - 1);
+    for (int i = 0; i < threads - 1; i++) {
+        thread_ids[i] = thread(&hexGraph::getMonteCarloWeights, this, ref(*(results[i])), ref(*board), iters_per_thread, currentMove, lastMove); // Gather the results
+    }
+    
+    // Use the main thread to do the same work
+    vector<int>* main_thread_results = new vector<int>(board_size);
+    getMonteCarloWeights(*main_thread_results, *board, iters_per_thread, currentMove, lastMove);
+        
+    // DEBUG
+    cout << "Main thread with vector: " << endl;
+    for (int j = 0; j < main_thread_results->size(); j++) {
+        cout << (*main_thread_results)[j] << " ";
+    }
+    cout << endl;
+    
+    // Gather monte carlo threads together
+    for (int i = 0; i < threads - 1; i++) {
+        thread_ids[i].join();
+        cout << "Slave thread with vector: " << endl;
+        vector<int>* results_i = results[i];
+        for (int j = 0; j < results_i->size(); j++) {
+            cout << (*results_i)[j] << " ";
+        }
+        cout << endl;
+    }
+    
+    // Add up all the vectors from results and main_thread_results
+    vector<int> final_result(board_size, 0);
+    for (int i = 0; i < threads - 1; i++) { // For each one of the results arrays
+        for (int j = 0; j < board_size; j++) { // For each one of the board spaces
+            final_result[j] += (*(results[i]))[j];
+        }
+    }
+    // Add the results of the main thread as well.
+    for (int j = 0; j < board_size; j++) { // For each one of the board spaces
+        final_result[j] += (*main_thread_results)[j];
+    }
+    
+    // DEBUG
+    cout << "Final Thread Vector: " << endl;
+    for (int j = 0; j < final_result.size(); j++) {
+        cout << final_result[j] << " ";
+    }
+    cout << endl;
     
     // Extract the best move from the vector of move weights
     int best_move_index;
     int best_move_weight = 0;
-    for (int i = 0; i < move_weights.size(); i++) {
-        if (move_weights[i] > best_move_weight) {
+    for (int i = 0; i < final_result.size(); i++) {
+        if (final_result[i] > best_move_weight) {
             best_move_index = i;
-            best_move_weight = move_weights[i];
+            best_move_weight = final_result[i];
         }
     }
     

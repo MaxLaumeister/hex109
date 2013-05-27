@@ -18,12 +18,12 @@ public:
     friend ostream& operator<<(ostream &out, hexGraph &inGraph);
     const int size; // Size after factoring in pseudonodes
     const int sideLength; // Side length that this graph models
-    Space checkWinner(const hexBoard* board);
-    bool hasWon(const hexBoard* board, const Space color);
-    int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE);
+    Space checkWinner(const hexBoard* board) const;
+    bool hasWon(const hexBoard* board, const Space color) const;
+    int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE) const;
 private:
-    vector<int> getMonteCarloWeights(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove);
-    bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color);
+    void getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, int iterations, const Space currentMove, const Space lastMove) const;
+    bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const;
     void addEdge(int node1, int node2);
     void addArc(int node1, int node2);
     vector< vector<int> > nodes;
