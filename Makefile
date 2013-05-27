@@ -1,6 +1,6 @@
 TARGET= asg5
 CC= g++
-CFLAGS= -ggdb -std=c++0x
+CFLAGS= -std=c++0x
 DEPS = game.h player.h hexBoard.h hexGraph.h
 OBJ = main.o game.o player.o  hexBoard.o hexGraph.o
 
