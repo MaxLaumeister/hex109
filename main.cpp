@@ -8,7 +8,7 @@ using namespace std;
 
 void benchmark() {
     unsigned int n = thread::hardware_concurrency();
-    if (n == 1) {
+    if (n <= 1) {
         cout << "No multithreading support detected." << endl;
     } else {
         cout << "Multithreading across " << n << " logical cores." << endl;

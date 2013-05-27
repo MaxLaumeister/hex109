@@ -155,7 +155,8 @@ void hexGraph::getMonteCarloWeights(vector<int> &move_weights, const hexBoard &b
 }
 
 int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove) const{
-    const unsigned int threads = thread::hardware_concurrency();
+    const unsigned int s_threads = thread::hardware_concurrency();
+    const unsigned int threads = s_threads > 1 ? s_threads : 1;
     const int iters_per_thread = iterations / threads;
     const int board_size = board->getSize();
     
@@ -168,9 +169,9 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Spa
     }
     
     // Set off monte carlo threads
-    vector<thread> thread_ids(threads - 1);
+    vector<thread> thread_ids;
     for (int i = 0; i < threads - 1; i++) {
-        thread_ids[i] = thread(&hexGraph::getMonteCarloWeights, this, ref(*(results[i])), ref(*board), iters_per_thread, currentMove, lastMove); // Gather the results
+        thread_ids.push_back(move(thread(&hexGraph::getMonteCarloWeights, this, ref(*(results[i])), ref(*board), iters_per_thread, currentMove, lastMove))); // Gather the results
     }
     
     // Use the main thread to do the same work
