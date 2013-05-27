@@ -201,8 +201,8 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Spa
     for (int i = 0; i < threads - 1; i++) { // For each one of the results arrays
         for (int j = 0; j < board_size; j++) { // For each one of the board spaces
             final_result[j] += (*(results[i]))[j];
-            delete results[i];
         }
+        delete results[i];
     }
     // Add the results of the main thread as well.
     for (int j = 0; j < board_size; j++) { // For each one of the board spaces
