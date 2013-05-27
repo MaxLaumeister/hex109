@@ -1,17 +1,24 @@
 ***** GRADER INSTRUCTIONS *****
 
+Compile this on unix.ucsc.edu.
+
 HOW TO COMPILE:
     make
 
 HOW TO RUN: 
-    ./asg4
+    ./asg5
 
 ***** ENVIRONMENTS/COMPILERS TESTED *****
 
-unix.ucsc.edu/g++
-RaspberryPi/Debian/g++
+unix.ucsc.edu/g++ v4.4.6
+RaspberryPi/Debian/g++ v4.6.3
+MacOS-10.8.3/g++ v4.8.0
 
 ***** WHAT DID I LEARN *****
+
+ADDENDUM: This is a resubmit of asg4. It satisfies the requirements of asg5. My "what I learned" for asg4 is below. In addition to the previous submission, this submission does AI using a multithreaded monte carlo algorithm.
+
+****************************
 
 First up, the strategy my program uses: It finds a shortest unblocked path from top to bottom of the board, then starts building it out from the middle of the path. It's not very robust, and it's pretty easy to beat. Given enough time, however, and if you make bad moves, it will eventually maneuvre its way around your pieces. I'm looking forward to adding the Monte Carlo AI to make it a lot better.
 

@@ -1,4 +1,4 @@
-TARGET= asg4
+TARGET= asg5
 CC= g++
 CFLAGS= -ggdb -std=c++0x
 DEPS = game.h player.h hexBoard.h hexGraph.h
