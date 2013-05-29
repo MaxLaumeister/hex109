@@ -23,7 +23,7 @@ ostream& operator<<(ostream &out, Space sp) {
 }
 
 void Game::gameLoop() {
-    int monte_carlo_iterations = 2000;
+    int monte_carlo_iterations = 5000;
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) board->setSpace(2, 2, P_BLACK); // I read somewhere that 2,2 is a balanced opening move (remember pie rule).
