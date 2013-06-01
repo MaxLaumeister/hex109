@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <assert.h>
+#include <functional>
 #include "hexGraph.h"
 
 using namespace std;
@@ -57,6 +58,20 @@ ostream& operator<<(ostream &out, hexGraph &inGraph) {
     }
 
     return cout;
+}
+
+// Add two vectors element by element
+template <typename T>
+std::vector<T> operator+(const std::vector<T>& a, const std::vector<T>& b)
+{
+    assert(a.size() == b.size());
+
+    std::vector<T> result;
+    result.reserve(a.size());
+
+    std::transform(a.begin(), a.end(), b.begin(), 
+                   std::back_inserter(result), std::plus<T>());
+    return result;
 }
 
 // Add a two-way edge to the graph
@@ -124,7 +139,10 @@ int hexGraph::getAIMove(const hexBoard &board, const int &iterations, const int 
     exit(0);
 }
 
+// Returns (move, weight)
+
 pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const {
+    const int threads = 4;
     cout << "(Depth: " << plies << " ";
     int board_size = board.getSize();
     
@@ -136,19 +154,41 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
             unused_spaces.push_back(i);
         }
     }
+    const int unused_spaces_size = unused_spaces.size();
     
     // Get AI weights for empty spaces
     
-    vector<int> move_weights = getAIMoveWeights(board, iterations, plies, this_player, unused_spaces);
+    vector< vector<int> > thread_move_weights(threads - 1);
+    for (int i = 0; i < threads - 1; i++) {
+        thread_move_weights[i] = getAIMoveWeights(board, iterations, plies, this_player, unused_spaces);
+    }
+    
+    // Take the average of all the threads
+    
+    vector<int> result(unused_spaces_size, 0);
+    for (int i = 0; i < threads - 1; i++) {
+        result = result + thread_move_weights[i];
+    }
+    for (int i = 0; i < result.size(); i++) {
+        result[i] = result[i] / (threads - 1);
+    }
+    
+    // DEBUG
+    for(int i = 0; i < thread_move_weights.size(); i++) {
+        for (int j = 0; j < thread_move_weights[i].size(); j++) {
+            cout << thread_move_weights[i][j] << " ";
+        }
+        cout << endl;
+    }
     
     // Extract best move weight out of all weights
     int best_move;
     int best_move_weight = 0;
-    int move_weights_size = move_weights.size();
+    int move_weights_size = result.size();
     for (int i = 0; i < move_weights_size; i++) {
-        if (move_weights[i] > best_move_weight) {
+        if (result[i] > best_move_weight) {
             best_move = unused_spaces[i];
-            best_move_weight = move_weights[i];
+            best_move_weight = result[i];
         }
     }
     cout << "Best: " << best_move_weight << ")" << endl;

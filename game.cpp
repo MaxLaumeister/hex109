@@ -25,7 +25,7 @@ ostream& operator<<(ostream &out, Space sp) {
 }
 
 void Game::gameLoop() {
-    const int monte_carlo_iterations = 5000;
+    const int monte_carlo_iterations = 1000;
     const int ai_plies = 1;
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
