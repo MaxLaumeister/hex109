@@ -125,22 +125,21 @@ int hexGraph::getAIMove(const hexBoard &board, const int &iterations, const int 
 }
 
 pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const {
-    // Get move weights for all empty spaces on the board
     cout << "(Depth: " << plies << " ";
     int board_size = board.getSize();
+    
+    // Get indexes of empty spaces on the board
     vector<int> unused_spaces;
-    vector<int> move_weights;
     unused_spaces.reserve(board_size);
-    move_weights.reserve(board_size);
     for (int i = 0; i < board_size; i++) {
         if (board.getSpace(i) == P_EMPTY) {
-            const int weight = getAIMoveWeight(board, iterations, plies, this_player, i);
             unused_spaces.push_back(i);
-            move_weights.push_back(weight);
-            cout << weight << " ";
-            //cout.flush();
-        } else cout << "- ";
+        }
     }
+    
+    // Get AI weights for empty spaces
+    
+    vector<int> move_weights = getAIMoveWeights(board, iterations, plies, this_player, unused_spaces);
     
     // Extract best move weight out of all weights
     int best_move;
@@ -156,7 +155,15 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
     return pair<int, int>(best_move, best_move_weight);
 }
 
-
+vector<int> hexGraph::getAIMoveWeights(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const vector<int> &moves) const {
+    vector<int> result;
+    const int moves_size = moves.size();
+    result.reserve(moves_size);
+    for (int i = 0; i < moves_size; i++) {
+        result.push_back(getAIMoveWeight(board, iterations, plies, this_player, moves[i]));
+    }
+    return result;
+}
 
 inline int hexGraph::getAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const int &move) const {
     if (plies == 1) return getMonteCarloWeight(board, iterations, this_player, move); // Last ply -> pass off to Monte Carlo method

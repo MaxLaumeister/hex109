@@ -25,7 +25,8 @@ ostream& operator<<(ostream &out, Space sp) {
 }
 
 void Game::gameLoop() {
-    int monte_carlo_iterations = 200;
+    const int monte_carlo_iterations = 5000;
+    const int ai_plies = 1;
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) { // Make a predetermined first move
@@ -48,10 +49,10 @@ void Game::gameLoop() {
         if (turn == 1 && playerWentFirst) {
             // Calculate move on a fresh board, because we can pie away the opponent's move if needed
             hexBoard temp(board->sideLength); // Fresh board with same dimensions
-            comMoveIndex = gameGraph.getAIMove(temp, monte_carlo_iterations, 2, P_BLACK);
+            comMoveIndex = gameGraph.getAIMove(temp, monte_carlo_iterations, ai_plies, P_BLACK);
             if (board->getSpace(comMoveIndex) == P_WHITE) cout << "CPU Player took your Pie!" << endl;
         } else {
-            comMoveIndex = gameGraph.getAIMove(*board, monte_carlo_iterations, 2, P_BLACK); // Calculate move
+            comMoveIndex = gameGraph.getAIMove(*board, monte_carlo_iterations, ai_plies, P_BLACK); // Calculate move
         }
         board->setSpace(comMoveIndex, P_BLACK);
 	if (winner = gameGraph.checkWinner(board)) break;

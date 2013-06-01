@@ -28,6 +28,7 @@ private:
     int getMonteCarloWeight(const hexBoard &board, const int &iterations, const Space &this_player, const int &move) const;
     pair<int, int> getBestAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const;
     int getAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const int &move) const;
+    vector<int> getAIMoveWeights(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const vector<int> &moves) const;
     void getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, int iterations, const Space this_player) const;
     bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const;
     
