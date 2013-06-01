@@ -1,9 +1,11 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
 #include "game.h"
 #include "hexGraph.h"
+#include "hexBoard.h"
 
 using namespace std;
 
@@ -23,11 +25,14 @@ ostream& operator<<(ostream &out, Space sp) {
 }
 
 void Game::gameLoop() {
-    int monte_carlo_iterations = 5000;
+    int monte_carlo_iterations = 200;
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
-    if (!playerWentFirst) board->setSpace(2, 2, P_BLACK); // I read somewhere that 2,2 is a balanced opening move (remember pie rule).
-    hexGraph gameGraph(board);// DEBUG
+    if (!playerWentFirst) { // Make a predetermined first move
+        int rank = min(2, board->sideLength - 1); // Account for teeny tiny boards
+        board->setSpace(rank, rank, P_BLACK); // I read somewhere that 2,2 is a balanced opening move (remember pie rule).
+    }
+    hexGraph gameGraph(board);
     int comMoveIndex = -1;
     while(true) {
         turn++;
@@ -40,13 +45,13 @@ void Game::gameLoop() {
         drawBoard();
 	if (winner = gameGraph.checkWinner(board)) break;
         cout << "Calculating optimal CPU move..." << endl;
-        if (turn == 1) {
+        if (turn == 1 && playerWentFirst) {
             // Calculate move on a fresh board, because we can pie away the opponent's move if needed
             hexBoard temp(board->sideLength); // Fresh board with same dimensions
-            comMoveIndex = gameGraph.getMonteCarloMove(&temp, monte_carlo_iterations);
+            comMoveIndex = gameGraph.getAIMove(temp, monte_carlo_iterations, 2, P_BLACK);
             if (board->getSpace(comMoveIndex) == P_WHITE) cout << "CPU Player took your Pie!" << endl;
         } else {
-            comMoveIndex = gameGraph.getMonteCarloMove(board, monte_carlo_iterations); // Calculate move
+            comMoveIndex = gameGraph.getAIMove(*board, monte_carlo_iterations, 2, P_BLACK); // Calculate move
         }
         board->setSpace(comMoveIndex, P_BLACK);
 	if (winner = gameGraph.checkWinner(board)) break;

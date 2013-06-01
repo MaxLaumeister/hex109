@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <assert.h>
 #include <thread>
-
+#include <vector>
+#include <iostream>
+#include <assert.h>
 #include "hexGraph.h"
 
 using namespace std;
@@ -82,6 +84,12 @@ Space hexGraph::checkWinner(const hexBoard* board) const {
     return P_EMPTY;
 }
 
+inline Space hexGraph::oppositeColor(Space color) {
+    if (color == P_BLACK) return P_WHITE;
+    else if (color == P_WHITE) return P_BLACK;
+    else exit(1);
+}
+
 // Depth first search to see if nodes are connected
 
 bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const {
@@ -101,7 +109,7 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space
             if (visited[candidate_node]) continue;
             if (candidate_node >= size - 4 || board->getSpace(candidate_node) != color) {
                 visited[candidate_node] = true;
-                continue; // If it's the wrong color, throw it out.
+                continue; // If it's the wrong color, or a pseudonode, don't pathfind through it.
             }
             s.push(nodes[currnode][i]); // Push the new node onto the search stack
         }
@@ -109,10 +117,97 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space
     return false;
 }
 
+int hexGraph::getAIMove(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const {
+    pair<int, int> move = getBestAIMoveWeight(board, iterations, plies, this_player);
+    if (move.second != 0) return move.first;
+    cout << "CPU Resigns. Player wins!" << endl; // If there is no move to keep the player from winning
+    exit(0);
+}
+
+pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const {
+    // Get move weights for all empty spaces on the board
+    cout << "(Depth: " << plies << " ";
+    int board_size = board.getSize();
+    vector<int> unused_spaces;
+    vector<int> move_weights;
+    unused_spaces.reserve(board_size);
+    move_weights.reserve(board_size);
+    for (int i = 0; i < board_size; i++) {
+        if (board.getSpace(i) == P_EMPTY) {
+            const int weight = getAIMoveWeight(board, iterations, plies, this_player, i);
+            unused_spaces.push_back(i);
+            move_weights.push_back(weight);
+            cout << weight << " ";
+            //cout.flush();
+        } else cout << "- ";
+    }
+    
+    // Extract best move weight out of all weights
+    int best_move;
+    int best_move_weight = 0;
+    int move_weights_size = move_weights.size();
+    for (int i = 0; i < move_weights_size; i++) {
+        if (move_weights[i] > best_move_weight) {
+            best_move = unused_spaces[i];
+            best_move_weight = move_weights[i];
+        }
+    }
+    cout << "Best: " << best_move_weight << ")" << endl;
+    return pair<int, int>(best_move, best_move_weight);
+}
+
+
+
+inline int hexGraph::getAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const int &move) const {
+    if (plies == 1) return getMonteCarloWeight(board, iterations, this_player, move); // Last ply -> pass off to Monte Carlo method
+    assert (plies > 0);
+    // Otherwise, recursively calculate the best opponent response
+    hexBoard moveMade(board); // Copy board
+    moveMade.setSpace(move, this_player); // Make the new move on the board
+    // The worse White's next best move is, the better our move is.
+    return iterations - getBestAIMoveWeight(moveMade, iterations, plies - 1, oppositeColor(this_player)).second;
+}
+
+int hexGraph::getMonteCarloWeight(const hexBoard &board, const int &iterations, const Space &this_player, const int &move) const {
+    Space other_player = oppositeColor(this_player);
+    
+    // Create a working board for iteration
+    hexBoard carlo_board(board);
+    carlo_board.setSpace(move, this_player); // Make our move on the board
+    
+    // Count the number of unused spaces on the board
+    int unused_spaces_count = 0;
+    vector<int> unused_spaces;
+    int carlo_board_size = carlo_board.getSize();
+    for (int i = 0; i < carlo_board_size; i++) {
+        if (carlo_board.getSpace(i) == P_EMPTY) {
+            unused_spaces_count++;
+            unused_spaces.push_back(i);
+        }
+    }
+    // Fill a vector with alternating moves
+    vector<Space> random_chips(unused_spaces_count - 1);
+    for (int i = 0; i < unused_spaces_count - 1; i++) { // We will place our chip on the board, so the next move will be the other player's
+        if (i % 2 == 0) random_chips[i] = other_player;
+        else random_chips[i] = this_player;
+    }
+    // Then run Monte Carlo
+    int wins = 0;
+    for (int ii = 0; ii < iterations; ii++) { // Iterate over random shuffles
+        random_shuffle(random_chips.begin(), random_chips.end()); //  Shuffle the chips
+        for (int i = 0; i < unused_spaces_count; i++) {
+            carlo_board.setSpace(unused_spaces[i], random_chips[i]); // Copy them into the board
+        }
+        if (hasWon(&carlo_board, this_player)) wins++; // Check to see if it is a win
+    }
+    return wins;
+}
+
 // Move weights are stored in move_weights input
 
-void hexGraph::getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, const int iterations, const Space currentMove, const Space lastMove) const{
+/*void hexGraph::getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, const int iterations, const Space this_player) const {
     assert(move_weights.size() == board.getSize());
+    Space other_player = oppositeColor(this_player);
     // Count the number of unused spaces on the board
     int unused_spaces_count = 0;
     vector<int> unused_spaces;
@@ -125,13 +220,13 @@ void hexGraph::getMonteCarloWeights(vector<int> &move_weights, const hexBoard &b
     // Fill a vector with alternating moves
     vector<Space> random_chips(unused_spaces_count - 1);
     for (int i = 0; i < unused_spaces_count - 1; i++) { // We will place our chip on the board, so the next move will be the other player's
-        if (i % 2 == 0) random_chips[i] = lastMove;
-        else random_chips[i] = currentMove;
+        if (i % 2 == 0) random_chips[i] = other_player;
+        else random_chips[i] = this_player;
     }
     // Begin Monte Carlo
     hexBoard carlo_board(board); // Create a working board for iteration
     for (int carlo_move_unusedspaces_index = 0; carlo_move_unusedspaces_index < unused_spaces_count; carlo_move_unusedspaces_index++) { // For each unused space
-        carlo_board.setSpace(unused_spaces[carlo_move_unusedspaces_index], currentMove); // Make a move in that space
+        carlo_board.setSpace(unused_spaces[carlo_move_unusedspaces_index], this_player); // Make a move in that space
         // Then run Monte Carlo on the new configuration
         int wins = 0;
         for (int ii = 0; ii < iterations; ii++) { // Iterate over random shuffles
@@ -147,14 +242,15 @@ void hexGraph::getMonteCarloWeights(vector<int> &move_weights, const hexBoard &b
                 j++;
                 i++;
             }
-            if (hasWon(&carlo_board, currentMove)) wins++; // Check to see if it is a win
+            if (hasWon(&carlo_board, this_player)) wins++; // Check to see if it is a win
         }
         // Record the times won as the "move weight"
         move_weights[unused_spaces[carlo_move_unusedspaces_index]] = wins;
     }
 }
 
-int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove, const Space lastMove) const{
+int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Space this_player) const{
+    Space other_player = oppositeColor(this_player);
     const unsigned int s_threads = thread::hardware_concurrency();
     const unsigned int threads = s_threads > 1 ? s_threads : 1;
     const int iters_per_thread = iterations / threads;
@@ -171,12 +267,12 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Spa
     // Set off monte carlo threads
     vector<thread> thread_ids;
     for (int i = 0; i < threads - 1; i++) {
-        thread_ids.push_back(move(thread(&hexGraph::getMonteCarloWeights, this, ref(*(results[i])), ref(*board), iters_per_thread, currentMove, lastMove))); // Gather the results
+        thread_ids.push_back(move(thread(&hexGraph::getMonteCarloWeights, this, ref(*(results[i])), ref(*board), iters_per_thread, this_player))); // Gather the results
     }
     
     // Use the main thread to do the same work
     vector<int>* main_thread_results = new vector<int>(board_size);
-    getMonteCarloWeights(*main_thread_results, *board, iters_per_thread, currentMove, lastMove);
+    getMonteCarloWeights(*main_thread_results, *board, iters_per_thread, this_player);
         
     // DEBUG
     cout << "Main thread with vector: " << endl;
@@ -232,4 +328,5 @@ int hexGraph::getMonteCarloMove(const hexBoard* board, int iterations, const Spa
     cout << "Best Move Found: (" << bmc.first << ", " << bmc.second << ") with weight " << best_move_weight << endl;
     
     return best_move_index;
-}
+} */
+

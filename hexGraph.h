@@ -20,15 +20,25 @@ public:
     const int sideLength; // Side length that this graph models
     Space checkWinner(const hexBoard* board) const;
     bool hasWon(const hexBoard* board, const Space color) const;
-    int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove = P_BLACK, const Space lastMove = P_WHITE) const;
+    static Space oppositeColor(Space color);
+    int getAIMove(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const;
 private:
-    void getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, int iterations, const Space currentMove, const Space lastMove) const;
+    // hexGraph algorithm
+    int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove) const;
+    int getMonteCarloWeight(const hexBoard &board, const int &iterations, const Space &this_player, const int &move) const;
+    pair<int, int> getBestAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const;
+    int getAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const int &move) const;
+    void getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, int iterations, const Space this_player) const;
     bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const;
+    
+    // hexGraph
+    
     void addEdge(int node1, int node2);
     void addArc(int node1, int node2);
     vector< vector<int> > nodes;
     
-    // Indexes of the pseudonodes
+    // Pseudonode indices
+    
     int pseudo_top;
     int pseudo_bottom;
     int pseudo_left;
