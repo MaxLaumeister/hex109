@@ -147,12 +147,12 @@ int hexGraph::getAIMove(const hexBoard &board, const int &iterations, const int 
 
 pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, int threads, const Space &this_player) const {
     assert(iterations > threads);
+    int board_size = board.getSize();
     if (threads > board_size) threads = board_size;
     const int iters_per_thread = iterations / threads;
     const int main_thread_iters = iters_per_thread + (iterations % threads); // Prevent thread round off error
     
     if (DEBUG) cout << "(Depth: " << plies << endl;
-    int board_size = board.getSize();
     
     // Get indexes of empty spaces on the board
     
