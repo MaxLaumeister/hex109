@@ -104,7 +104,7 @@ Space hexGraph::checkWinner(const hexBoard* board) const {
 inline Space hexGraph::oppositeColor(Space color) {
     if (color == P_BLACK) return P_WHITE;
     else if (color == P_WHITE) return P_BLACK;
-    else exit(1);
+    else assert(false);
 }
 
 // Depth first search to see if nodes are connected
@@ -133,6 +133,8 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space
     }
     return false;
 }
+
+// Public-facing function that returns the best move for a specific color to make.
 
 int hexGraph::getAIMove(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const {
     int threads = thread::hardware_concurrency();
@@ -230,6 +232,8 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
     return pair<int, int>(best_move, best_move_weight);
 }
 
+// Calculate move weights and return them using the input parameter "&result".
+
 void hexGraph::getAIMoveWeights(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const vector<int> &moves, vector<int> &result) const {
     const int moves_size = moves.size();
     result.reserve(moves_size);
@@ -237,6 +241,8 @@ void hexGraph::getAIMoveWeights(const hexBoard &board, const int &iterations, co
         result[i] = getAIMoveWeight(board, iterations, plies, this_player, moves[i]);
     }
 }
+
+// Calculate the weight for a particular move, either by using Monte Carlo or by going one ply deeper.
 
 inline int hexGraph::getAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const int &move) const {
     if (plies == 1) return getMonteCarloWeight(board, iterations, this_player, move); // Last ply -> pass off to Monte Carlo method
@@ -247,6 +253,8 @@ inline int hexGraph::getAIMoveWeight(const hexBoard &board, const int &iteration
     // The worse White's next best move is, the better our move is.
     return iterations - getBestAIMoveWeight(moveMade, iterations, plies - 1, 1, oppositeColor(this_player)).second;
 }
+
+// Calculate a move weight using Monte Carlo. This represents bottoming-out of the AI.
 
 int hexGraph::getMonteCarloWeight(const hexBoard &board, const int &iterations, const Space &this_player, const int &move) const {
     Space other_player = oppositeColor(this_player);
