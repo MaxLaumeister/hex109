@@ -9,7 +9,12 @@ enum Agent {NOBODY, PLAYER, COM};
 
 class Game {
     public:
-      Game() : turn(0) {
+      // Default constructor
+      Game() : turn(0), ai_monte_carlo_iterations(5000), ai_plies(1) {
+          board = new hexBoard(Player::getBoardSize());
+      }
+      // You probably want to use this constructor
+      Game(int iterations, int plies) : turn(0), ai_monte_carlo_iterations(iterations), ai_plies(plies) {
           board = new hexBoard(Player::getBoardSize());
       }
       ~Game(){
@@ -19,6 +24,8 @@ class Game {
       void gameLoop();
     private:
       void movePlayer(bool piRule = false);
+      int ai_monte_carlo_iterations;
+      int ai_plies;
       int turn;
       hexBoard* board;
 };

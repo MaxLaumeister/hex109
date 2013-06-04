@@ -25,8 +25,6 @@ ostream& operator<<(ostream &out, Space sp) {
 }
 
 void Game::gameLoop() {
-    const int monte_carlo_iterations = 5000;
-    const int ai_plies = 1;
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) { // Make a predetermined first move
@@ -46,7 +44,7 @@ void Game::gameLoop() {
         drawBoard();
 	if (winner = gameGraph.checkWinner(board)) break;
         cout << "Calculating optimal CPU move..." << endl;
-        comMoveIndex = gameGraph.getAIMove(*board, monte_carlo_iterations, ai_plies, P_BLACK); // Calculate move
+        comMoveIndex = gameGraph.getAIMove(*board, ai_monte_carlo_iterations, ai_plies, P_BLACK); // Calculate move
         board->setSpace(comMoveIndex, P_BLACK);
 	if (winner = gameGraph.checkWinner(board)) break;
     }
