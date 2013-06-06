@@ -19,8 +19,12 @@ int main() {
     srand(time(0));
     cout << "-- Hex109 v1.0 --" << endl;
     benchmark();
-    Game newGame(5000, 1); // (Iterations, plies) for the ai.
+    
+    int iterations = 20000;
+    int plies = 1;
+    Game newGame(iterations, plies);
     newGame.gameLoop();
+    
     return 0;
 }
 
