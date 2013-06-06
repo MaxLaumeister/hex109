@@ -185,7 +185,7 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
     for (int i = 0; i < thread_move_weights_size; i++) {
         thread_move_weights[i] = new vector<int>(unused_spaces_size);
     }
-    vector<thread> thread_ids(threads - 1);
+    vector<thread> thread_ids;
     for (int i = 0; i < threads - 1; i++) {
         thread_ids[i] = move(thread(&hexGraph::getAIMoveWeights, this, ref(board), ref(iters_per_thread), ref(plies), ref(this_player), ref(unused_spaces), ref(*(thread_move_weights[i]))));
     }
