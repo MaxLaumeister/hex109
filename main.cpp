@@ -20,7 +20,7 @@ int main() {
     cout << "-- Hex109 v1.0 --" << endl;
     benchmark();
     
-    int iterations = 20000;
+    int iterations = 5000;
     int plies = 1;
     Game newGame(iterations, plies);
     newGame.gameLoop();

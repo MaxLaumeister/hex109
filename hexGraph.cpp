@@ -1,4 +1,5 @@
 #include <stack>
+#include <queue>
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -13,6 +14,16 @@
 const bool DEBUG = false;
 
 using namespace std;
+
+typedef pair<int, int> Move;
+
+struct compare  
+{  
+  bool operator()(const Move& left, const Move& right)  
+  {  
+      return left.second < right.second;  
+  }  
+};
 
 void hexGraph::init(const hexBoard* board) {
     // Initialize the pseudonodes
@@ -218,18 +229,21 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
         delete thread_move_weights[i];
     }
     
-    // Extract best move weight out of all weights
-    int best_move;
-    int best_move_weight = 0;
-    int move_weights_size = result.size();
-    for (int i = 0; i < move_weights_size; i++) {
-        if (result[i] > best_move_weight) {
-            best_move = unused_spaces[i];
-            best_move_weight = result[i];
-        }
+    // Convert result vector to max priority queue
+    priority_queue<Move, vector<Move>, compare> result_q;
+    for (int i = 0; i < result.size(); i++) {
+        //cout << unused_spaces[i] << ", " << result[i] << endl;
+        Move newMove(unused_spaces.at(i), result.at(i));
+        result_q.push(newMove);
     }
-    if (DEBUG) cout << "Best: " << best_move_weight << ")" << endl;
-    return pair<int, int>(best_move, best_move_weight);
+    
+    Move bestMove = result_q.top();
+    //cout << "Best: " << bestMove.first << ", " << bestMove.second << endl;
+    /*while(!result_q.empty()) {
+        cout << result_q.top().first << ": " << result_q.top().second << endl;
+        result_q.pop();
+    }*/
+    return bestMove;
 }
 
 // Calculate move weights and return them using the input parameter "&result".
