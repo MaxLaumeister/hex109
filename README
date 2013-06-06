@@ -11,16 +11,10 @@ HOW TO RUN:
 ***** ENVIRONMENTS/COMPILERS TESTED *****
 
 unix.ucsc.edu/g++ v4.4.6
-RaspberryPi/Debian/g++ v4.6.3
 MacOS-10.8.3/g++ v4.8.0
 
 ***** WHAT DID I LEARN *****
 
-ADDENDUM: This is a resubmit of asg4. It satisfies the requirements of asg5. My "what I learned" for asg4 is below. In addition to the previous submission, this submission does AI using a multithreaded monte carlo algorithm.
+By doing this assignment I learned how to squeeze performance out of a C++ program by use of G++ optimization settings and multithreading. I also learned how to implement a Monte Carlo method, and how to create a minimax tree through recursion. I also learned that the minimax tree was really just wishful thinking, because the heft of calculation required to take advantage of it was much more than a normal computer could provide. At first I implemented just the Monte Carlo method and got it working reliably for a few thousand iterations. Then I implemented the minimax tree to search further plies, bottoming out at a Monte Carlo calculation. What I found is that my computer was unable even to calculate a second ply down in the minimax tree using a reasonable amount of Monte Carlo iterations. I attempted to add a more sophisticated component which would use Monte Carlo to select a top 10 moves list to be investigated one ply further, but unfortunately I ran out of time, and also my code base didn’t lend itself terribly well to integrating this concept.
 
-****************************
-
-First up, the strategy my program uses: It finds a shortest unblocked path from top to bottom of the board, then starts building it out from the middle of the path. It's not very robust, and it's pretty easy to beat. Given enough time, however, and if you make bad moves, it will eventually maneuvre its way around your pieces. I'm looking forward to adding the Monte Carlo AI to make it a lot better.
-
-This assignment was excellent practice in writing a bunch of classes to work together. I feel like I finally have a solid understanding of header files and their role in the multi-file compilation process. Still think that Java makes more sense in its data hiding though. One of the problems I ran across was that my graph class was not at all suited for the task of finding chains of board game pieces. My graph class was built so that each edge had a color, but what I needed was a system that would allow each node to have a color. I ended up extending my current graph class with a hexGraph class, but even that seems a bit disorganized now. Currently I use the additions to the hexGraph class to keep track of the current board state, yet I use the base graph part of it exclusively for CPU AI strategy. This will probably change in the next assignment, where I will split the hexGraph class into separate hexGraph and hexBoard classes, which will be instantiated and managed separately.
-
+I can see Monte Carlo being useful for all kinds of different things though. While I’m surprised at how good its performance is as a Hex AI, at the same time, I’ve figured out how to beat it pretty consistently on an 11x11 board.
