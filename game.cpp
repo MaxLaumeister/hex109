@@ -75,6 +75,11 @@ void Game::movePlayer(bool piRule){
 }
 
 void Game::drawBoard() {
+
+    // The drawing routine turned into spaghetti.
+	// I promise the rest of the program is a lot more readable.
+
+    // First print out a nice turn banner
     
     string hz = "-";
  
@@ -85,13 +90,7 @@ void Game::drawBoard() {
     int bannersize = (2 * indent) + 5 + boardWidth * 3 + log10(boardWidth);
     
     string vt = "";
-    for (int i = 0; i < indent - 1; i++) vt = vt + " "; // This is sloppy, I know.
-
-    // Drawing a nice board ended up being 10x more difficult than I ever
-    // thought it could be. Anyway, here's the spaghetti that produces
-    // a really pretty command-line game board.
-
-    // First print out a nice turn banner
+    for (int i = 0; i < indent - 1; i++) vt = vt + " "; // This is really sloppy, I know.
 
     cout << endl;
 
@@ -144,34 +143,34 @@ void Game::drawBoard() {
 
     int intlength;
     for (int i = boardHeight - 1; i >= 0; i--) {
-	cout << vt;
+	    cout << vt;
 
         // Pad the board on the left to make it a parallelogram
 	
-	for (int j = 0; j < boardHeight - i - 1; j++) {
+	    for (int j = 0; j < boardHeight - i - 1; j++) {
             cout << " ";
-	}
+	    }
 
         // Pad the number on the left, so that the board doesn't shift around.
 
-	intlength = (i == 0) ? 0 : log10(i);
-	for (int j = 0; j < totalpadding - intlength; j++) {
+	    intlength = (i == 0) ? 0 : log10(i);
+	    for (int j = 0; j < totalpadding - intlength; j++) {
             cout << " ";
-	}
+	    }
 
         // Print the row nunber
 
-	cout << " " << i << "  ";
+	    cout << " " << i << "  ";
  
         // Print all of the spaces in the row
         
-	for(int j = 0; j < boardWidth; j++) {
+	    for(int j = 0; j < boardWidth; j++) {
             cout << board->getSpace(j, i) << " ";
         }
 
         // Print the row number one more time on the right
 
-	cout << " " << i << endl;
+	    cout << " " << i << endl;
     }
 
     // Print first row of column numbers
