@@ -2,7 +2,13 @@
 
 A command line C++ implementation of [Game of Hex](http://en.wikipedia.org/wiki/Hex_(board_game)), with a text interface and simple Monte Carlo AI. It was created as a requirement of the *CMPS 109: Advanced Programming* course at University of California, Santa Cruz.
 
-This program requires C++11 <thread> support, which is not provided by older versions of g++. It has been tested successfully using g++ v4.4.6 and v4.8.0. 
+This program requires C++11 <thread> support, which is not provided by older versions of g++. It has been tested successfully using g++ v4.4.6 and v4.8.0.
+
+### Usage ###
+
+    ./hex109 [iterations]
+
+Where *iterations* optionally specifies the number of Monte Carlo iterations to perform (per tile) in the AI calculation. Default is 5000, useful values range from 1000 to 20000.
 
 ### Sample Game ###
 

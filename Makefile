@@ -1,4 +1,4 @@
-TARGET= asg5
+TARGET= hex109
 CC= g++
 CFLAGS= -std=c++0x -O3 -Wall -Wextra
 DEPS = game.h player.h hexBoard.h hexGraph.h
