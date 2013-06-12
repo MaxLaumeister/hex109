@@ -1,6 +1,6 @@
 TARGET= asg5
 CC= g++
-CFLAGS= -std=c++0x -O3
+CFLAGS= -std=c++0x -O3 -Wall -Wextra
 DEPS = game.h player.h hexBoard.h hexGraph.h
 OBJ = main.o game.o player.o hexGraph.o
 

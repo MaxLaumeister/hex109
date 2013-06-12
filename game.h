@@ -24,9 +24,9 @@ class Game {
       void gameLoop();
     private:
       void movePlayer(bool piRule = false);
+      int turn;
       int ai_monte_carlo_iterations;
       int ai_plies;
-      int turn;
       hexBoard* board;
 };
 

@@ -25,62 +25,62 @@ class hexBoard {
       // Board manipulating functions
 
       inline int getSize() const {return spaces->size();}
-      int getIndex(int x, int y) const;
-      pair<int, int> getCoords(int index) const;
-      Space getSpace(int index) const;
-      Space getSpace(int x, int y) const;
-      void setSpace(int index, Space sp);
-      void setSpace(int x, int y, Space sp);
-      bool isValidMove(int x, int y, bool piRule = false) const;
-      bool isValidMove(int index, bool piRule = false) const;
-      bool isValidSpace(int index) const;
-      bool isValidSpace(int x, int y) const;
-      const int sideLength;
+      int getIndex(unsigned int x, unsigned int y) const;
+      pair<int, int> getCoords(unsigned int index) const;
+      Space getSpace(unsigned int index) const;
+      Space getSpace(unsigned int x, unsigned int y) const;
+      void setSpace(unsigned int index, Space sp);
+      void setSpace(unsigned int x, unsigned int y, Space sp);
+      bool isValidMove(unsigned int x, unsigned int y, bool piRule = false) const;
+      bool isValidMove(unsigned int index, bool piRule = false) const;
+      bool isValidSpace(unsigned int index) const;
+      bool isValidSpace(unsigned int x, unsigned int y) const;
+      const unsigned int sideLength;
     private:
       vector<Space>* spaces;
 };
 
-inline bool hexBoard::isValidSpace(int index) const {
-    return index >= 0 && index < spaces->size();
+inline bool hexBoard::isValidSpace(unsigned int index) const {
+    return index < spaces->size();
 }
 
-inline bool hexBoard::isValidSpace(int x, int y) const {
-    return x >= 0 && y >= 0 && x < sideLength && y < sideLength;
+inline bool hexBoard::isValidSpace(unsigned int x, unsigned int y) const {
+    return x < sideLength && y < sideLength;
 }
 
-inline bool hexBoard::isValidMove(int x, int y, bool piRule) const {
+inline bool hexBoard::isValidMove(unsigned int x, unsigned int y, bool piRule) const {
     return isValidSpace(x, y) && (getSpace(x, y) == P_EMPTY || piRule);
 }
 
-inline bool hexBoard::isValidMove(int index, bool piRule) const {
+inline bool hexBoard::isValidMove(unsigned int index, bool piRule) const {
     return isValidSpace(index) && (getSpace(index) == P_EMPTY || piRule);
 }
 
-inline int hexBoard::getIndex(int x, int y) const {
+inline int hexBoard::getIndex(unsigned int x, unsigned int y) const {
     return sideLength*y + x;
 }
 
-inline pair<int, int> hexBoard::getCoords(int index) const {
+inline pair<int, int> hexBoard::getCoords(unsigned int index) const {
     int x = index % sideLength;
     int y = index / sideLength;
     return pair<int, int>(x, y);
 }
 
-inline Space hexBoard::getSpace(int index) const {
+inline Space hexBoard::getSpace(unsigned int index) const {
     // assert(isValidSpace(index));
     return (*spaces)[index];
 }
 
-inline Space hexBoard::getSpace(int x, int y) const {
+inline Space hexBoard::getSpace(unsigned int x, unsigned int y) const {
     return getSpace(getIndex(x, y));
 }
 
-inline void hexBoard::setSpace(int index, Space sp) {
+inline void hexBoard::setSpace(unsigned int index, Space sp) {
     // assert(isValidSpace(index));
     (*spaces)[index] = sp;
 }
 
-inline void hexBoard::setSpace(int x, int y, Space sp) {
+inline void hexBoard::setSpace(unsigned int x, unsigned int y, Space sp) {
     setSpace(getIndex(x, y), sp);
 }
 

@@ -28,7 +28,7 @@ void Game::gameLoop() {
     Space winner;
     bool playerWentFirst = Player::goesFirst(); // Get player input
     if (!playerWentFirst) { // Make a predetermined first move
-        int rank = min(2, board->sideLength - 1); // Account for teeny tiny boards
+        unsigned int rank = min(2u, board->sideLength - 1); // Account for teeny tiny boards
         board->setSpace(rank, rank, P_BLACK); // I read somewhere that 2,2 is a balanced opening move (remember pie rule).
     }
     hexGraph gameGraph(board);
@@ -42,11 +42,11 @@ void Game::gameLoop() {
         }
 	movePlayer(turn == 1 && !playerWentFirst); // Pass whether the pi rule is in effect
         drawBoard();
-	if (winner = gameGraph.checkWinner(board)) break;
+	if ((winner = gameGraph.checkWinner(board))) break;
         cout << "Calculating optimal CPU move..." << endl;
         comMoveIndex = gameGraph.getAIMove(*board, ai_monte_carlo_iterations, ai_plies, P_BLACK); // Calculate move
         board->setSpace(comMoveIndex, P_BLACK);
-	if (winner = gameGraph.checkWinner(board)) break;
+	if ((winner = gameGraph.checkWinner(board))) break;
     }
     drawBoard();
     if (winner == P_WHITE) cout << "Player Wins!" << endl;

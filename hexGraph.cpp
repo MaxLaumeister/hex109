@@ -34,8 +34,8 @@ void hexGraph::init(const hexBoard* board) {
           
     // Connect the game board graph
     pair<int, int> coords;
-    int x, y;
-    for (int i = 0; i < size - 4; i++) {
+    unsigned int x, y;
+    for (unsigned int i = 0; i < size - 4; i++) {
         coords = board->getCoords(i);
         x = coords.first;
 	y = coords.second;
@@ -49,7 +49,7 @@ void hexGraph::init(const hexBoard* board) {
     }
 
     // Connect board-edge pseudonodes
-    for (int i = 0; i < sideLength; i++) {
+    for (unsigned int i = 0; i < sideLength; i++) {
         addEdge(pseudo_top, board->getIndex(i, sideLength - 1));
         addEdge(pseudo_bottom, board->getIndex(i, 0));
         addEdge(pseudo_left, board->getIndex(0, i));
@@ -60,17 +60,17 @@ void hexGraph::init(const hexBoard* board) {
 // Prettyprint an entire graph
 
 ostream& operator<<(ostream &out, hexGraph &inGraph) {
-    cout << "Graph:" << endl;
+    out << "Graph:" << endl;
 
-    for (int i = 0; i < inGraph.size; i++) {
-        cout << i << ": ";
-        for (int j = 0; j < inGraph.nodes.at(i).size(); j++) {
-            cout << inGraph.nodes.at(i).at(j) << " ";
+    for (unsigned int i = 0; i < inGraph.size; i++) {
+        out << i << ": ";
+        for (unsigned int j = 0; j < inGraph.nodes.at(i).size(); j++) {
+            out << inGraph.nodes.at(i).at(j) << " ";
         }
-        cout << endl;
+        out << endl;
     }
 
-    return cout;
+    return out;
 }
 
 // Add two vectors element by element
@@ -103,7 +103,8 @@ inline void hexGraph::addArc(int node1, int node2) {
 inline bool hexGraph::hasWon(const hexBoard* board, const Space color) const {
     if (color == P_BLACK) return isConnectedDFS(board, pseudo_bottom, pseudo_top, P_BLACK);
     if (color == P_WHITE) return isConnectedDFS(board, pseudo_left, pseudo_right, P_WHITE);
-    assert(color != P_EMPTY); // Color should always be either black or white.
+    assert(false); // Color should always be either black or white.
+    return false;
 }
 
 Space hexGraph::checkWinner(const hexBoard* board) const {
@@ -120,18 +121,18 @@ inline Space hexGraph::oppositeColor(Space color) {
 
 // Depth first search to see if nodes are connected
 
-bool hexGraph::isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const {
+bool hexGraph::isConnectedDFS(const hexBoard* board, unsigned int node1, unsigned int node2, Space color) const {
     vector<int> visited(size, false);
     stack<int> s;
     s.push(node1);
-    int currnode;
+    unsigned int currnode;
     while (!s.empty()) {
         currnode = s.top();
         s.pop(); // Pop the top node off the stack
         visited[currnode] = true; // Set node 1 as visited
-        int node_list_size = nodes[currnode].size();
-        int candidate_node;
-        for (int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
+        unsigned int node_list_size = nodes[currnode].size();
+        unsigned int candidate_node;
+        for (unsigned int i = 0; i < node_list_size; i++) { // For each node adjacent to node 1
             candidate_node = nodes[currnode][i];
             if (candidate_node == node2) return true; // Search is over
             if (visited[candidate_node]) continue;
@@ -205,19 +206,19 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
     // DEBUG
     if (DEBUG) {
         cout << "Main Thread Weights: " << endl;
-        for (int j = 0; j < main_thread_weight.size(); j++) {
+        for (unsigned int j = 0; j < main_thread_weight.size(); j++) {
             cout << main_thread_weight[j] << " ";
         }
         cout << endl;
         cout << "Slave Thread Weights: " << endl;
-        for(int i = 0; i < thread_move_weights.size(); i++) {
-            for (int j = 0; j < thread_move_weights[i]->size(); j++) {
+        for(unsigned int i = 0; i < thread_move_weights.size(); i++) {
+            for (unsigned int j = 0; j < thread_move_weights[i]->size(); j++) {
                 cout << (*(thread_move_weights[i]))[j] << " ";
             }
             cout << endl << endl;
         }
         cout << "Total Weights: " << endl;
-        for (int j = 0; j < result.size(); j++) {
+        for (unsigned int j = 0; j < result.size(); j++) {
             cout << result[j] << " ";
         }
         cout << endl;
@@ -231,7 +232,7 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
     
     // Convert result vector to max priority queue
     priority_queue<Move, vector<Move>, compare> result_q;
-    for (int i = 0; i < result.size(); i++) {
+    for (unsigned int i = 0; i < result.size(); i++) {
         //cout << unused_spaces[i] << ", " << result[i] << endl;
         Move newMove(unused_spaces.at(i), result.at(i));
         result_q.push(newMove);

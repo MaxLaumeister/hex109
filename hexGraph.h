@@ -16,12 +16,12 @@ public:
     hexGraph(const hexBoard* board) : sideLength(board->sideLength), size(board->sideLength * board->sideLength + 4), nodes(board->sideLength * board->sideLength + 4) {init(board);}
     void init(const hexBoard* board);
     friend ostream& operator<<(ostream &out, hexGraph &inGraph);
-    const int size; // Size after factoring in pseudonodes
-    const int sideLength; // Side length that this graph models
     Space checkWinner(const hexBoard* board) const;
     bool hasWon(const hexBoard* board, const Space color) const;
     static Space oppositeColor(Space color);
     int getAIMove(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const;
+    const unsigned int sideLength; // Side length that this graph models
+    const unsigned int size; // Size after factoring in pseudonodes
 private:
     // hexGraph algorithm
     int getMonteCarloMove(const hexBoard* board, int iterations, const Space currentMove) const;
@@ -30,7 +30,7 @@ private:
     int getAIMoveWeight(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const int &move) const;
     void getAIMoveWeights(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player, const vector<int> &moves, vector<int> &result) const;
     void getMonteCarloWeights(vector<int> &move_weights, const hexBoard &board, int iterations, const Space this_player) const;
-    bool isConnectedDFS(const hexBoard* board, int node1, int node2, Space color) const;
+    bool isConnectedDFS(const hexBoard* board, unsigned int node1, unsigned int node2, Space color) const;
     
     // hexGraph
     
