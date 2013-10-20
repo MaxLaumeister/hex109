@@ -9,12 +9,17 @@
 using namespace std;
 
 void benchmark() {
+    // The threading in this program only works
+    // on some systems, so it's disabled by default.
+
+    /*
     unsigned int n = thread::hardware_concurrency();
     if (n <= 1) {
         cout << "No multithreading support detected." << endl;
     } else {
         cout << "Multithreading across " << n << " logical cores." << endl;
     }
+    */
 }
 
 int main(int argc, const char *argv[]) {

@@ -149,7 +149,7 @@ bool hexGraph::isConnectedDFS(const hexBoard* board, unsigned int node1, unsigne
 // Public-facing function that returns the best move for a specific color to make.
 
 int hexGraph::getAIMove(const hexBoard &board, const int &iterations, const int &plies, const Space &this_player) const {
-    int threads = thread::hardware_concurrency();
+    int threads = 1; //thread::hardware_concurrency(); // Threading only works on some systems
     if (threads < 1) threads = 1;
     pair<int, int> move = getBestAIMoveWeight(board, iterations, plies, threads, this_player);
     if (move.second != 0) return move.first;
@@ -188,7 +188,8 @@ pair<int, int> hexGraph::getBestAIMoveWeight(const hexBoard &board, const int &i
     }
     vector<thread> thread_ids;
     for (int i = 0; i < threads - 1; i++) {
-        thread_ids[i] = move(thread(&hexGraph::getAIMoveWeights, this, ref(board), ref(iters_per_thread), ref(plies), ref(this_player), ref(unused_spaces), ref(*(thread_move_weights[i]))));
+	thread thr = thread(&hexGraph::getAIMoveWeights, this, ref(board), ref(iters_per_thread), ref(plies), ref(this_player), ref(unused_spaces), ref(*(thread_move_weights[i])));
+        thread_ids[i] = move(thr);
     }
     
     vector<int> main_thread_weight(unused_spaces_size);
