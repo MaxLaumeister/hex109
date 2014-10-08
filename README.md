@@ -39,7 +39,7 @@ Where *iterations* optionally specifies the number of Monte Carlo iterations to 
 
 ### License ###
 
-If you distribute this project in part or in full, please attribute with a link to [its GitHub page](https://github.com/MaxLaumeister/Ascman). This software is available under The MIT License, reproduced below.
+If you distribute this project in part or in full, please attribute with a link to [its GitHub page](https://github.com/MaxLaumeister/Hex109). This software is available under The MIT License, reproduced below.
 
 ***
 
